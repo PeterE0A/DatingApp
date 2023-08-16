@@ -3,19 +3,37 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using DatingApp.Services; // Replace with your actual namespace
+using DatingApp.Repositories;
+
+
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+string connectionString = configuration.GetConnectionString("DatingAppDB");
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-string connectionString = "DatingAppDB"; // Replace with your actual connection string
-
-builder.Services.AddSingleton<IDatabaseService>(new DatabaseService(connectionString));
-
+// Replace with your actual connection string
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddScoped<IDatingAppService>(provider =>
+    new DatingAppService(connectionString, provider.GetRequiredService<IDatabaseRepository>())
+);
+
+builder.Services.AddScoped<IDatabaseRepository, DatabaseRepository>(provider =>
+    new DatabaseRepository(connectionString)
+);
+
+
 
 
 var app = builder.Build();

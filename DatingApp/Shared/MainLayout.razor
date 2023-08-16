@@ -13,7 +13,25 @@
         </div>
 
         <article class="content px-4">
+            <!-- Your default content goes here -->
             @Body
         </article>
+
+        <!-- Centered Login and Signup components -->
+        <div class="centered-components">
+            <Login />
+            <Signup />
+        </div>
     </main>
 </div>
+
+<style>
+    /* Add your existing styles here */
+
+    .centered-components {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

@@ -1,0 +1,38 @@
+﻿@page "/create-account"
+@using DatingApp.Services
+@inject IDatingAppService DatingAppService
+
+<h3>Create Account</h3>
+
+<div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" @bind="@Username" />
+</div>
+<div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" @bind="@Password" />
+</div>
+<button @onclick="OnCreateAccountClick">Create Account</button>
+
+@code {
+    private string? Username;
+    private string? Password;
+
+    private async Task OnCreateAccountClick()
+    {
+        if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+        {
+            // Call the service method to create an account
+            bool success = await DatingAppService.CreateAccountAsync(Username, Password);
+
+            if (success)
+            {
+                // Account created successfully
+            }
+            else
+            {
+                // Account creation failed
+            }
+        }
+    }
+}
