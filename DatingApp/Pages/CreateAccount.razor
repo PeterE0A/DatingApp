@@ -12,27 +12,28 @@
     <label for="password">Password:</label>
     <input type="password" id="password" @bind="@Password" />
 </div>
-<button @onclick="OnCreateAccountClick">Create Account</button>
+<button @onclick="CreateAccountAsync">Create Account</button>
 
 @code {
-    private string? Username;
-    private string? Password;
+    private string Username { get; set; }
+    private string Password { get; set; }
 
-    private async Task OnCreateAccountClick()
+    private async Task CreateAccountAsync()
     {
-        if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-        {
-            // Call the service method to create an account
-            bool success = await DatingAppService.CreateAccountAsync(Username, Password);
+        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password); // Use your hashing logic
 
-            if (success)
-            {
-                // Account created successfully
-            }
-            else
-            {
-                // Account creation failed
-            }
+        bool success = await DatingAppService.CreateAccountAsync(Username, hashedPassword);
+
+        if (success)
+        {
+            // Account created successfully, navigate to the next page
+            // NavigationManager.NavigateTo("/create-profile");
+            Console.WriteLine("success");
+        }
+        else
+        {
+            // Account creation failed
+            // Handle error
         }
     }
 }
