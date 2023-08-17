@@ -1,0 +1,55 @@
+﻿@page "/delete-account"
+@using DatingApp.Services
+@inject IDatingAppService DatingAppService
+
+<h3>Delete Account</h3>
+
+<div>
+    <label for="userId">User ID:</label>
+    <input type="number" id="userId" @bind="@UserId" />
+</div>
+<button @onclick="DeleteAccountAsync">Delete Account</button>
+
+<div>
+    @if (IsAccountDeleted.HasValue)
+    {
+        if (IsAccountDeleted.Value)
+        {
+            <p>Account deleted successfully!</p>
+        }
+        else
+        {
+            <p>@ErrorMessage</p>
+        }
+    }
+</div>
+
+@code {
+    private int UserId { get; set; }
+    private bool? IsAccountDeleted { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private async Task DeleteAccountAsync()
+    {
+        try
+        {
+            bool success = await DatingAppService.DeleteAccountAsync(UserId);
+
+            if (success)
+            {
+                IsAccountDeleted = true;
+                ErrorMessage = string.Empty;
+            }
+            else
+            {
+                IsAccountDeleted = false;
+                ErrorMessage = "Account deletion failed.";
+            }
+        }
+        catch (Exception ex)
+        {
+            IsAccountDeleted = false;
+            ErrorMessage = ex.Message;
+        }
+    }
+}

@@ -1,8 +1,8 @@
-﻿@page "/create-account"
+﻿@page "/login"
 @using DatingApp.Services
 @inject IDatingAppService DatingAppService
 
-<h3>Create Account</h3>
+<h3>Login</h3>
 
 <div>
     <label for="username">Username:</label>
@@ -12,14 +12,14 @@
     <label for="password">Password:</label>
     <input type="password" id="password" @bind="@Password" />
 </div>
-<button @onclick="CreateAccountAsync">Create Account</button>
+<button @onclick="LogInAsync">Log In</button>
 
 <div>
-    @if (IsAccountCreated.HasValue)
+    @if (IsLoggedIn.HasValue)
     {
-        if (IsAccountCreated.Value)
+        if (IsLoggedIn.Value)
         {
-            <p>Account created successfully!</p>
+            <p>Logged in successfully!</p>
         }
         else
         {
@@ -31,37 +31,37 @@
 @code {
     private string? Username { get; set; }
     private string? Password { get; set; }
-    private bool? IsAccountCreated { get; set; }
+    private bool? IsLoggedIn { get; set; }
     private string? ErrorMessage { get; set; }
 
-    private async Task CreateAccountAsync()
+    private async Task LogInAsync()
     {
         try
         {
             if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
-                bool success = await DatingAppService.CreateAccountAsync(Username, Password);
+                bool? success = await DatingAppService.LogInAsync(Username, Password);
 
-                if (success)
+                if (success.HasValue && success.Value)
                 {
-                    IsAccountCreated = true;
+                    IsLoggedIn = true;
                     ErrorMessage = string.Empty;
                 }
                 else
                 {
-                    IsAccountCreated = false;
-                    ErrorMessage = "Account creation failed.";
+                    IsLoggedIn = false;
+                    ErrorMessage = "Log in failed.";
                 }
             }
             else
             {
-                IsAccountCreated = false;
+                IsLoggedIn = false;
                 ErrorMessage = "Username and password cannot be empty.";
             }
         }
         catch (Exception ex)
         {
-            IsAccountCreated = false;
+            IsLoggedIn = false;
             ErrorMessage = ex.Message;
         }
     }

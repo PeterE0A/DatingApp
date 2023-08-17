@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DatingApp.Repositories;
-using BCrypt.Net;
+using System.Data.SqlClient;
+using DatingApp.Services;
 
 namespace DatingApp.Services
 {
@@ -16,12 +17,11 @@ namespace DatingApp.Services
             _databaseRepository = databaseRepository;
         }
 
+
         public async Task<bool> CreateAccountAsync(string username, string password)
         {
-            string hashedPassword = PasswordHasher.HashPassword(password);
-
             // Call repository method to create account
-            return await _databaseRepository.CreateAccountAsync(username, hashedPassword);
+            return await _databaseRepository.CreateAccountAsync(username, password);
         }
 
         public async Task<bool> DeleteAccountAsync(int userId)
@@ -53,5 +53,28 @@ namespace DatingApp.Services
             // Call repository method to check for a match
             return await _databaseRepository.CheckForMatchAsync(userId1, userId2);
         }
+
+
+        
+
+
+        public async Task<bool?> LogInAsync(string username, string password)
+        {
+            // Retrieve password from database
+            string storedPassword = await _databaseRepository.GetPasswordAsync(username);
+
+            // Verify password
+            return password == storedPassword;
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

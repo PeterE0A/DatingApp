@@ -15,23 +15,57 @@ namespace DatingApp.Repositories
             _connectionString = connectionString;
         }
 
-        public async Task<bool> CreateAccountAsync(string username, string passwordHash)
+        public async Task<bool> CreateAccountAsync(string username, string password)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                using (var command = new SqlCommand("CreateAccount", connection))
+                await connection.OpenAsync();
+
+                string query = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password)";
+
+                using (var command = new SqlCommand(query, connection))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@Username", username);
-                    command.Parameters.AddWithValue("@PasswordHash", passwordHash);
+                    command.Parameters.AddWithValue("@Password", password);
 
-                    connection.Open();
-                    int result = await command.ExecuteNonQueryAsync();
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                    return result > 0;
+                    return rowsAffected > 0;
                 }
             }
         }
+
+
+        public async Task<string> GetPasswordAsync(string username)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT Password FROM Users WHERE Username = @Username";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    var result = await command.ExecuteScalarAsync();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return result.ToString() ?? string.Empty;
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+        }
+
+
+
+
+
 
         public async Task<bool> DeleteAccountAsync(int userId)
         {
