@@ -1,5 +1,20 @@
-﻿<h3>Logout</h3>
+﻿@page "/logout"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+
+<h3>Logging Out...</h3>
 
 @code {
-
+    protected override async Task OnInitializedAsync()
+    {
+        bool result = await DatingAppService.LogoutAsync();
+        if (result)
+        {
+            Navigation.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            // Handle logout failure
+        }
+    }
 }

@@ -18,6 +18,26 @@ namespace DatingApp.Services
         }
 
 
+        public async Task<bool> LogoutAsync()
+        {
+            try
+            {
+                // Implement your logout logic here
+                // For example, clear session data or perform other necessary actions.
+
+                // Clear session data or perform other necessary actions
+
+                return true; // Return true if logout was successful
+            }
+            catch (Exception)
+            {
+                // Handle any exceptions during logout
+                return false; // Return false if logout failed
+            }
+        }
+
+
+
         public async Task<bool> CreateAccountAsync(string username, string password)
         {
             // Call repository method to create account

@@ -5,6 +5,7 @@ namespace DatingApp.Services
 {
     public interface IDatingAppService
     {
+        Task<bool> LogoutAsync();
         Task<bool?> LogInAsync(string username, string password);
         Task<bool> CreateAccountAsync(string username, string password);
         Task<bool> DeleteAccountAsync(int userId);
