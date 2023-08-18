@@ -10,6 +10,8 @@ namespace DatingApp.Services
     {
         private readonly string _connectionString;
         private readonly IDatabaseRepository _databaseRepository;
+        
+
 
         public DatingAppService(string connectionString, IDatabaseRepository databaseRepository)
         {
@@ -17,6 +19,11 @@ namespace DatingApp.Services
             _databaseRepository = databaseRepository;
         }
 
+        //public async Task<bool> VerifyCredentialsAsync(string username, string password)
+        //{
+        //    string storedPassword = await _databaseRepository.GetPasswordAsync(username);
+        //    return password == storedPassword;
+        //}
 
         public async Task<bool> LogoutAsync()
         {
@@ -44,11 +51,67 @@ namespace DatingApp.Services
             return await _databaseRepository.CreateAccountAsync(username, password);
         }
 
+        //public async Task<bool> DeleteAccountAsync(string username, string password)
+        //{
+        //    try
+        //    {
+        //        bool credentialsValid = await VerifyCredentialsAsync(username, password);
+
+        //        if (!credentialsValid)
+        //        {
+        //            return false; // Invalid credentials, account deletion failed
+        //        }
+
+        //        int userId = await GetUserIdByUsername(username);
+
+        //        if (userId == -1)
+        //        {
+        //            return false; // User not found, account deletion failed
+        //        }
+
+        //        bool success = await _databaseRepository.DeleteAccountAsync(userId);
+
+        //        return success;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return false; // Handle exceptions appropriately
+        //    }
+        //}
+
+        // Implement the GetUserIdByUsername method to fetch the user's ID based on the username
+        //private async Task<int> GetUserIdByUsername(string username)
+        //{
+        //    using (var connection = new SqlConnection(_connectionString))
+        //    {
+        //        await connection.OpenAsync();
+
+        //        string query = "SELECT Id FROM Users WHERE Username = @Username";
+
+        //        using (var command = new SqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@Username", username);
+
+        //            var result = await command.ExecuteScalarAsync();
+
+        //            if (result != null && result != DBNull.Value)
+        //            {
+        //                return Convert.ToInt32(result);
+        //            }
+        //            else
+        //            {
+        //                return -1; // Return -1 if user not found
+        //            }
+        //        }
+        //    }
+        //}
+
         public async Task<bool> DeleteAccountAsync(int userId)
         {
             // Call repository method to delete account
             return await _databaseRepository.DeleteAccountAsync(userId);
         }
+
 
         public async Task<bool> CreateProfileAsync(int userId, string fullName, DateTime birthday, string gender, string city, string postalCode)
         {
@@ -86,6 +149,8 @@ namespace DatingApp.Services
             // Verify password
             return password == storedPassword;
         }
+
+
 
 
 
