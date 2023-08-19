@@ -8,6 +8,7 @@ namespace DatingApp.Services
 {
     public class DatingAppService : IDatingAppService
     {
+        private bool IsLoggedIn { get; set; } = false;
         private readonly string _connectionString;
         private readonly IDatabaseRepository _databaseRepository;
         
@@ -25,12 +26,33 @@ namespace DatingApp.Services
         //    return password == storedPassword;
         //}
 
+        //public async Task<bool> LogoutAsync()
+        //{
+        //    try
+        //    {
+        //        // Implement your logout logic here
+        //        // For example, clear session data or perform other necessary actions.
+
+        //        // Clear session data or perform other necessary actions
+
+        //        return true; // Return true if logout was successful
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // Handle any exceptions during logout
+        //        return false; // Return false if logout failed
+        //    }
+        //}
+
         public async Task<bool> LogoutAsync()
         {
             try
             {
                 // Implement your logout logic here
                 // For example, clear session data or perform other necessary actions.
+                // In your case, you can set IsLoggedIn to false.
+
+                IsLoggedIn = false; // Set the IsLoggedIn state to false upon successful logout
 
                 // Clear session data or perform other necessary actions
 
@@ -42,6 +64,7 @@ namespace DatingApp.Services
                 return false; // Return false if logout failed
             }
         }
+
 
 
 
@@ -138,7 +161,19 @@ namespace DatingApp.Services
         }
 
 
-        
+
+
+
+        //public async Task<bool?> LogInAsync(string username, string password)
+        //{
+        //    // Retrieve password from database
+        //    string storedPassword = await _databaseRepository.GetPasswordAsync(username);
+
+        //    // Verify password
+        //    return password == storedPassword;
+        //}
+
+
 
 
         public async Task<bool?> LogInAsync(string username, string password)
@@ -147,11 +182,15 @@ namespace DatingApp.Services
             string storedPassword = await _databaseRepository.GetPasswordAsync(username);
 
             // Verify password
-            return password == storedPassword;
+            bool isPasswordValid = password == storedPassword;
+
+            if (isPasswordValid)
+            {
+                IsLoggedIn = true; // Set the IsLoggedIn state to true upon successful login
+            }
+
+            return isPasswordValid;
         }
-
-
-
 
 
 

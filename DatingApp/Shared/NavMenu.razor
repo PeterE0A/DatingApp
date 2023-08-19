@@ -24,24 +24,28 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
-
-        <li class="nav-item">
-                <NavLink class="nav-link" href="/delete-account">
-                    <span class="oi oi-trash" aria-hidden="true"></span> Delete Account
-                </NavLink>
-            </li>
-
-        <div class="nav-item">
-            <NavLink class="nav-link" href="/logout">
-                <span class="oi oi-power-standby" aria-hidden="true"></span> Logout
-            </NavLink>
-        </div>
+      
+       @if (IsLoggedIn)
+{
+    <li class="nav-item">
+        <NavLink class="nav-link" href="/delete-account">
+            <span class="oi oi-trash" aria-hidden="true"></span> Delete Account
+        </NavLink>
+    </li>
+    
+    <div class="nav-item">
+        <NavLink class="nav-link" href="/logout">
+            <span class="oi oi-power-standby" aria-hidden="true"></span> Logout
+        </NavLink>
+    </div>
+}
     
 
     </nav>
 </div>
 
 @code {
+    private bool IsLoggedIn { get; set; } = false; // Default to not logged in
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -50,4 +54,17 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    // This method will be called when the user logs in
+    private void OnLoggedIn()
+    {
+        IsLoggedIn = true;
+    }
+
+    // This method will be called when the user logs out
+    private void OnLoggedOut()
+    {
+        IsLoggedIn = false;
+    }
 }
+

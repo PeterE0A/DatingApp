@@ -21,6 +21,7 @@
         if (IsAccountCreated.Value)
         {
             <p>Account created successfully!</p>
+            
         }
         else
         {
@@ -49,6 +50,7 @@
                 {
                     IsAccountCreated = true;
                     ErrorMessage = string.Empty;
+                    Navigation.NavigateTo("/login", forceLoad: true);
                 }
                 else
                 {
