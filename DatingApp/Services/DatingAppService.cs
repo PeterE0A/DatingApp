@@ -8,7 +8,10 @@ namespace DatingApp.Services
 {
     public class DatingAppService : IDatingAppService
     {
-        private bool IsLoggedIn { get; set; } = false;
+        private bool _isLoggedIn = false; // Initialize to false initially
+
+        public bool IsLoggedIn => _isLoggedIn;
+
         private readonly string _connectionString;
         private readonly IDatabaseRepository _databaseRepository;
         
@@ -49,12 +52,11 @@ namespace DatingApp.Services
             try
             {
                 // Implement your logout logic here
-                // For example, clear session data or perform other necessary actions.
-                // In your case, you can set IsLoggedIn to false.
-
-                IsLoggedIn = false; // Set the IsLoggedIn state to false upon successful logout
+                // Clear session data or perform other necessary actions.
 
                 // Clear session data or perform other necessary actions
+
+                _isLoggedIn = false; // Update the login status
 
                 return true; // Return true if logout was successful
             }
@@ -64,6 +66,7 @@ namespace DatingApp.Services
                 return false; // Return false if logout failed
             }
         }
+
 
 
 
@@ -178,19 +181,18 @@ namespace DatingApp.Services
 
         public async Task<bool?> LogInAsync(string username, string password)
         {
-            // Retrieve password from database
             string storedPassword = await _databaseRepository.GetPasswordAsync(username);
 
-            // Verify password
             bool isPasswordValid = password == storedPassword;
 
             if (isPasswordValid)
             {
-                IsLoggedIn = true; // Set the IsLoggedIn state to true upon successful login
+                _isLoggedIn = true; // Update the login status
             }
 
             return isPasswordValid;
         }
+
 
 
 

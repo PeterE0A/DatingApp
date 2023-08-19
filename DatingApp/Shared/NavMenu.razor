@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject IDatingAppService DatingAppService
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">DatingApp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -7,7 +10,7 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -25,46 +28,30 @@
             </NavLink>
         </div>
       
-       @if (IsLoggedIn)
-{
-    <li class="nav-item">
-        <NavLink class="nav-link" href="/delete-account">
-            <span class="oi oi-trash" aria-hidden="true"></span> Delete Account
-        </NavLink>
-    </li>
-    
-    <div class="nav-item">
-        <NavLink class="nav-link" href="/logout">
-            <span class="oi oi-power-standby" aria-hidden="true"></span> Logout
-        </NavLink>
-    </div>
-}
-    
+        @if (DatingAppService.IsLoggedIn)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="delete-account">
+                    <span class="oi oi-trash" aria-hidden="true"></span> Delete Account
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="logout">
+                    <span class="oi oi-power-standby" aria-hidden="true"></span> Logout
+                </NavLink>
+            </div>
+        }
 
     </nav>
 </div>
 
 @code {
-    private bool IsLoggedIn { get; set; } = false; // Default to not logged in
     private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "some-default-value"; // Provide a default value here
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-    }
-
-    // This method will be called when the user logs in
-    private void OnLoggedIn()
-    {
-        IsLoggedIn = true;
-    }
-
-    // This method will be called when the user logs out
-    private void OnLoggedOut()
-    {
-        IsLoggedIn = false;
     }
 }
 

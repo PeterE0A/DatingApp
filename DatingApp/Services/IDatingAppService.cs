@@ -5,6 +5,7 @@ namespace DatingApp.Services
 {
     public interface IDatingAppService
     {
+        bool IsLoggedIn { get; }
         Task<bool> LogoutAsync();
         Task<bool?> LogInAsync(string username, string password);
        
