@@ -8,8 +8,8 @@ namespace DatingApp.Services
 {
     public class DatingAppService : IDatingAppService
     {
-       
 
+       
         private readonly string _connectionString;
         private readonly IDatabaseRepository _databaseRepository;
         
@@ -27,23 +27,7 @@ namespace DatingApp.Services
         //    return password == storedPassword;
         //}
 
-        public async Task<bool> LogoutAsync()
-        {
-            try
-            {
-                // Implement your logout logic here
-                // For example, clear session data or perform other necessary actions.
-
-                // Clear session data or perform other necessary actions
-
-                return true; // Return true if logout was successful
-            }
-            catch (Exception)
-            {
-                // Handle any exceptions during logout
-                return false; // Return false if logout failed
-            }
-        }
+       
 
        
 
@@ -145,6 +129,24 @@ namespace DatingApp.Services
 
 
 
+        public async Task<bool> LogoutAsync()
+        {
+            try
+            {
+                // Implement your logout logic here
+                // For example, clear session data or perform other necessary actions.
+
+                // Clear session data or perform other necessary actions
+
+                return true; // Return true if logout was successful
+            }
+            catch (Exception)
+            {
+                // Handle any exceptions during logout
+                return false; // Return false if logout failed
+            }
+        }
+
 
 
         public async Task<bool?> LogInAsync(string username, string password)
@@ -155,10 +157,6 @@ namespace DatingApp.Services
             // Verify password
             return password == storedPassword;
         }
-
-
-
-
 
 
 
