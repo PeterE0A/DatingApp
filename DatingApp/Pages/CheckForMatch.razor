@@ -1,0 +1,48 @@
+﻿@page "/check-for-match"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+
+<h3>Check For Match</h3>
+
+<div>
+    <label for="userId1">User ID 1:</label>
+    <input type="text" id="userId1" @bind="@UserId1" />
+</div>
+<div>
+    <label for="userId2">User ID 2:</label>
+    <input type="text" id="userId2" @bind="@UserId2" />
+</div>
+<button @onclick="CheckForMatchAsync">Check For Match</button>
+
+<div>
+    @if (HasMatch.HasValue)
+    {
+        if (HasMatch.Value)
+        {
+            <p>There is a match!</p>
+        }
+        else
+        {
+            <p>No match found.</p>
+        }
+    }
+</div>
+
+@code {
+    private int UserId1 { get; set; }
+    private int UserId2 { get; set; }
+    private bool? HasMatch { get; set; }
+
+    private async Task CheckForMatchAsync()
+    {
+        try
+        {
+            bool match = await DatingAppService.CheckForMatchAsync(UserId1, UserId2);
+            HasMatch = match;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

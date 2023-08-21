@@ -1,0 +1,35 @@
+﻿@page "/delete-profile"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+
+<h3>Delete Profile</h3>
+
+<p>Are you sure you want to delete your profile?</p>
+<button @onclick="DeleteProfileAsync">Delete Profile</button>
+
+@code {
+    private async Task DeleteProfileAsync()
+    {
+        try
+        {
+            int userId = 1; // Replace with actual user ID from authentication
+
+            bool success = await DatingAppService.DeleteProfileAsync(userId);
+
+            if (success)
+            {
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                // Handle delete profile failure
+                //Navigation.NavigateTo("/error");
+                Console.WriteLine("Error");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

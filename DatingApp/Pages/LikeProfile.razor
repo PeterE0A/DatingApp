@@ -1,0 +1,57 @@
+﻿@page "/like-profile"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+
+<h3>Like Profile</h3>
+
+<div>
+    <label for="likedUserId">Liked User ID:</label>
+    <input type="text" id="likedUserId" @bind="@LikedUserId" />
+</div>
+<button @onclick="LikeProfileAsync">Like Profile</button>
+
+<div>
+    @if (Liked.HasValue)
+    {
+        if (Liked.Value)
+        {
+            <p>You liked the profile!</p>
+        }
+        else
+        {
+            <p>@ErrorMessage</p>
+        }
+    }
+</div>
+
+@code {
+    private int LikedUserId { get; set; }
+    private bool? Liked { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    private async Task LikeProfileAsync()
+    {
+        try
+        {
+            int likerUserId = 1; // Replace with actual user ID from authentication
+
+            bool success = await DatingAppService.AddLikeAsync(likerUserId, LikedUserId);
+
+            if (success)
+            {
+                Liked = true;
+                ErrorMessage = string.Empty;
+            }
+            else
+            {
+                Liked = false;
+                ErrorMessage = "Liking profile failed.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Liked = false;
+            ErrorMessage = ex.Message;
+        }
+    }
+}

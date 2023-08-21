@@ -1,0 +1,77 @@
+﻿@page "/create-profile"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+
+<h3>Create Profile</h3>
+
+<div>
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" @bind="@FullName" />
+</div>
+<div>
+    <label for="birthday">Birthday:</label>
+    <input type="date" id="birthday" @bind="@Birthday" />
+</div>
+<div>
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" @bind="@Gender" />
+</div>
+<div>
+    <label for="city">City:</label>
+    <input type="text" id="city" @bind="@City" />
+</div>
+<div>
+    <label for="postalCode">Postal Code:</label>
+    <input type="text" id="postalCode" @bind="@PostalCode" />
+</div>
+<button @onclick="CreateProfileAsync">Create Profile</button>
+
+<div>
+    @if (ProfileCreated.HasValue)
+    {
+        if (ProfileCreated.Value)
+        {
+            <p>Profile created successfully!</p>
+        }
+        else
+        {
+            <p>@ErrorMessage</p>
+        }
+    }
+</div>
+
+@code {
+    private string? FullName { get; set; }
+    private DateTime Birthday { get; set; }
+    private string? Gender { get; set; }
+    private string? City { get; set; }
+    private string? PostalCode { get; set; }
+    private bool? ProfileCreated { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    private async Task CreateProfileAsync()
+    {
+        try
+        {
+            int userId = 1; // Replace with actual user ID from authentication
+
+            bool success = await DatingAppService.CreateProfileAsync(userId, FullName, Birthday, Gender, City, PostalCode);
+
+            if (success)
+            {
+                ProfileCreated = true;
+                ErrorMessage = string.Empty;
+            }
+            else
+            {
+                ProfileCreated = false;
+                ErrorMessage = "Profile creation failed.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ProfileCreated = false;
+            ErrorMessage = ex.Message;
+        }
+    }
+}
