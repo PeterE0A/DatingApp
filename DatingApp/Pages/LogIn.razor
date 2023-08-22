@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @using DatingApp.Services
 @inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
 
 <h3>Login</h3>
 
@@ -13,6 +14,7 @@
     <input type="password" id="password" @bind="@Password" />
 </div>
 <button @onclick="LogInAsync">Log In</button>
+<button @onclick="GoBack">Go Back</button>
 
 <div>
     @if (IsLoggedIn.HasValue)
@@ -20,17 +22,6 @@
         if (IsLoggedIn.Value)
         {
             <p>Logged in successfully!</p>
-
-               <div class="nav-item px-3">
-                <NavLink class="nav-link" href="delete-account">
-                    <span class="oi oi-trash" aria-hidden="true"></span> Delete Account
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="logout">
-                    <span class="oi oi-power-standby" aria-hidden="true"></span> Logout
-                </NavLink>
-            </div>
         }
         else
         {
@@ -38,6 +29,8 @@
         }
     }
 </div>
+
+
 
 @code {
     private string? Username { get; set; }
@@ -57,6 +50,8 @@
                 {
                     IsLoggedIn = true;
                     ErrorMessage = string.Empty;
+                    Navigation.NavigateTo("/create-profile", forceLoad: true);
+                   
                 }
                 else
                 {
@@ -76,4 +71,11 @@
             ErrorMessage = ex.Message;
         }
     }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/create-account", forceLoad: true);
+    }
+
+   
 }

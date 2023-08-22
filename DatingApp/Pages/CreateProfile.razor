@@ -25,6 +25,8 @@
     <input type="text" id="postalCode" @bind="@PostalCode" />
 </div>
 <button @onclick="CreateProfileAsync">Create Profile</button>
+<button @onclick="GoBack">Go Back</button>
+
 
 <div>
     @if (ProfileCreated.HasValue)
@@ -73,5 +75,10 @@
             ProfileCreated = false;
             ErrorMessage = ex.Message;
         }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/login", forceLoad: true);
     }
 }
