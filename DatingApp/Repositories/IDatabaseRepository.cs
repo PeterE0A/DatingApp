@@ -4,7 +4,9 @@ namespace DatingApp.Repositories
 {
     public interface IDatabaseRepository
     {
-        
+
+        Task<bool> CheckForProfileAsync(string username);
+
         Task<bool> CreateAccountAsync(string username, string password);
         Task<string> GetPasswordAsync(string username);
         Task<bool> DeleteAccountAsync(int userId);

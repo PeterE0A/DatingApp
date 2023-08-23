@@ -163,6 +163,7 @@ namespace DatingApp.Repositories
 
 
 
+
         public async Task<bool> DeleteProfileAsync()
         {
             try
@@ -210,7 +211,26 @@ namespace DatingApp.Repositories
 
 
 
-      
+
+        public async Task<bool> CheckForProfileAsync(string username)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Users u JOIN UserProfiles up ON u.UserID = up.UserID WHERE u.Username = @Username", connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    var result = await command.ExecuteScalarAsync();
+                    var profileCount = result as int? ?? 0;
+
+                    return profileCount > 0;
+                }
+            }
+        }
+
+
 
 
 

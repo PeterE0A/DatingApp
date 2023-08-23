@@ -27,11 +27,14 @@ namespace DatingApp.Services
         //    return password == storedPassword;
         //}
 
-       
-
-       
 
 
+
+
+        public async Task<bool> CheckForProfileAsync(string username)
+        {
+            return await _databaseRepository.CheckForProfileAsync(username);
+        }
 
 
 
