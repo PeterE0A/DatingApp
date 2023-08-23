@@ -7,24 +7,7 @@
 <p>Are you sure you want to delete your profile?</p>
 <button @onclick="DeleteProfileAsync">Delete Profile</button>
 
-<div>
-    @if (ProfileDeleted.HasValue)
-    {
-        if (ProfileDeleted.Value)
-        {
-            <p>Profile deleted successfully!</p>
-        }
-        else
-        {
-            <p>@ErrorMessage</p>
-        }
-    }
-</div>
-
 @code {
-    private bool? ProfileDeleted { get; set; }
-    private string? ErrorMessage { get; set; }
-
     private async Task DeleteProfileAsync()
     {
         try
@@ -33,19 +16,17 @@
 
             if (success)
             {
-                ProfileDeleted = true;
-                ErrorMessage = string.Empty;
+                Navigation.NavigateTo("/", forceLoad: true);
             }
             else
             {
-                ProfileDeleted = false;
-                ErrorMessage = "Error deleting profile.";
+                // Handle delete profile failure
+                Console.WriteLine("Error deleting profile.");
             }
         }
         catch (Exception ex)
         {
-            ProfileDeleted = false;
-            ErrorMessage = ex.Message;
+            Console.WriteLine(ex.Message);
         }
     }
 }

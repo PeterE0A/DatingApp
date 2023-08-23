@@ -111,7 +111,15 @@ namespace DatingApp.Services
 
         public async Task<bool> CreateProfileAsync(string fullName, DateTime birthday, string gender, string city, string postalCode)
         {
-            return await _databaseRepository.CreateProfileAsync(fullName, birthday, gender, city, postalCode);
+            try
+            {
+                return await _databaseRepository.CreateProfileAsync(fullName, birthday, gender, city, postalCode);
+            }
+            catch (Exception)
+            {
+                // Handle any exceptions that occur during profile creation
+                return false; // Profile creation failed
+            }
         }
 
 

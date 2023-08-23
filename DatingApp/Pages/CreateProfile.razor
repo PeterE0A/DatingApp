@@ -30,7 +30,6 @@
 <button @onclick="CreateProfileAsync">Create Profile</button>
 <button @onclick="GoBack">Go Back</button>
 
-
 <div>
     @if (ProfileCreated.HasValue)
     {
@@ -48,7 +47,7 @@
 @code {
     private string? FullName { get; set; }
     private DateTime Birthday { get; set; }
-    private string? Gender { get; set; }
+    private string? Gender { get; set; } = "Male"; 
     private string? City { get; set; }
     private string? PostalCode { get; set; }
     private bool? ProfileCreated { get; set; }
@@ -58,7 +57,7 @@
     {
         try
         {
-            
+            Console.WriteLine($"Gender: {Gender}");
 
             bool success = await DatingAppService.CreateProfileAsync(FullName, Birthday, Gender, City, PostalCode);
 

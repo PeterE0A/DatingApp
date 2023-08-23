@@ -130,7 +130,7 @@ namespace DatingApp.Repositories
 
                 return true; // Profile creation succeeded
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle any exceptions that occur during profile creation
                 return false; // Profile creation failed
@@ -181,7 +181,7 @@ namespace DatingApp.Repositories
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle exception
                 return false;
