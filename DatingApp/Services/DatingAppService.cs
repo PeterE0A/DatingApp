@@ -103,18 +103,30 @@ namespace DatingApp.Services
         }
 
 
-        public async Task<bool> CreateProfileAsync(int userId, string fullName, DateTime birthday, string gender, string city, string postalCode)
+        //public async Task<bool> CreateProfileAsync(int userId, string fullName, DateTime birthday, string gender, string city, string postalCode)
+        //{
+        //    // Call repository method to create profile
+        //    return await _databaseRepository.CreateProfileAsync(userId, fullName, birthday, gender, city, postalCode);
+        //}
+
+        public async Task<bool> CreateProfileAsync(string fullName, DateTime birthday, string gender, string city, string postalCode)
         {
-            // Call repository method to create profile
-            return await _databaseRepository.CreateProfileAsync(userId, fullName, birthday, gender, city, postalCode);
+            return await _databaseRepository.CreateProfileAsync(fullName, birthday, gender, city, postalCode);
         }
 
 
 
-        public async Task<bool> DeleteProfileAsync(int userId)
+
+        //public async Task<bool> DeleteProfileAsync(int userId)
+        //{
+        //    // Call repository method to delete profile
+        //    return await _databaseRepository.DeleteProfileAsync(userId);
+        //}
+
+
+        public async Task<bool> DeleteProfileAsync()
         {
-            // Call repository method to delete profile
-            return await _databaseRepository.DeleteProfileAsync(userId);
+            return await _databaseRepository.DeleteProfileAsync();
         }
 
         public async Task<bool> AddLikeAsync(int likerUserId, int likedUserId)

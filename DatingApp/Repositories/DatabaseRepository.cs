@@ -84,25 +84,56 @@ namespace DatingApp.Repositories
             }
         }
 
-        public async Task<bool> CreateProfileAsync(int userId, string fullName, DateTime birthday, string gender, string city, string postalCode)
+        //public async Task<bool> CreateProfileAsync(int userId, string fullName, DateTime birthday, string gender, string city, string postalCode)
+        //{
+        //    using (var connection = new SqlConnection(_connectionString))
+        //    {
+        //        using (var command = new SqlCommand("CreateProfile", connection))
+        //        {
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            command.Parameters.AddWithValue("@UserID", userId);
+        //            command.Parameters.AddWithValue("@FullName", fullName);
+        //            command.Parameters.AddWithValue("@Birthday", birthday);
+        //            command.Parameters.AddWithValue("@Gender", gender);
+        //            command.Parameters.AddWithValue("@City", city);
+        //            command.Parameters.AddWithValue("@PostalCode", postalCode);
+
+        //            connection.Open();
+        //            int result = await command.ExecuteNonQueryAsync();
+
+        //            return result > 0;
+        //        }
+        //    }
+        //}
+
+        public async Task<bool> CreateProfileAsync(string fullName, DateTime birthday, string gender, string city, string postalCode)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                using (var command = new SqlCommand("CreateProfile", connection))
+                using (var connection = new SqlConnection(_connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserID", userId);
-                    command.Parameters.AddWithValue("@FullName", fullName);
-                    command.Parameters.AddWithValue("@Birthday", birthday);
-                    command.Parameters.AddWithValue("@Gender", gender);
-                    command.Parameters.AddWithValue("@City", city);
-                    command.Parameters.AddWithValue("@PostalCode", postalCode);
+                    await connection.OpenAsync();
 
-                    connection.Open();
-                    int result = await command.ExecuteNonQueryAsync();
+                    var query = "INSERT INTO UserProfiles (FullName, Birthday, Gender, City, PostalCode) VALUES (@FullName, @Birthday, @Gender, @City, @PostalCode)";
 
-                    return result > 0;
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@FullName", fullName);
+                        command.Parameters.AddWithValue("@Birthday", birthday);
+                        command.Parameters.AddWithValue("@Gender", gender);
+                        command.Parameters.AddWithValue("@City", city);
+                        command.Parameters.AddWithValue("@PostalCode", postalCode);
+
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
+
+                return true; // Profile creation succeeded
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during profile creation
+                return false; // Profile creation failed
             }
         }
 
@@ -111,22 +142,52 @@ namespace DatingApp.Repositories
 
 
 
-        public async Task<bool> DeleteProfileAsync(int userId)
+
+        //public async Task<bool> DeleteProfileAsync(int userId)
+        //{
+        //    using (var connection = new SqlConnection(_connectionString))
+        //    {
+        //        using (var command = new SqlCommand("DeleteProfile", connection))
+        //        {
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            command.Parameters.AddWithValue("@UserID", userId);
+
+        //            connection.Open();
+        //            int result = await command.ExecuteNonQueryAsync();
+
+        //            return result > 0;
+        //        }
+        //    }
+        //}
+
+
+
+
+        public async Task<bool> DeleteProfileAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                using (var command = new SqlCommand("DeleteProfile", connection))
+                using (var connection = new SqlConnection(_connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserID", userId);
+                    await connection.OpenAsync();
 
-                    connection.Open();
-                    int result = await command.ExecuteNonQueryAsync();
+                    using (var command = new SqlCommand("DeleteProfile", connection))
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    return result > 0;
+                        int result = await command.ExecuteNonQueryAsync();
+
+                        return result > 0;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return false;
+            }
         }
+
 
         public async Task<bool> AddLikeAsync(int likerUserId, int likedUserId)
         {

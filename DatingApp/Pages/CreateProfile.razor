@@ -14,7 +14,10 @@
 </div>
 <div>
     <label for="gender">Gender:</label>
-    <input type="text" id="gender" @bind="@Gender" />
+    <select id="gender" @bind="@Gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
 </div>
 <div>
     <label for="city">City:</label>
@@ -55,9 +58,9 @@
     {
         try
         {
-            int userId = 1; // Replace with actual user ID from authentication
+            
 
-            bool success = await DatingAppService.CreateProfileAsync(userId, FullName, Birthday, Gender, City, PostalCode);
+            bool success = await DatingAppService.CreateProfileAsync(FullName, Birthday, Gender, City, PostalCode);
 
             if (success)
             {
