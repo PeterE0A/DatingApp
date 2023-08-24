@@ -3,7 +3,6 @@
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
 
-
 <h3>Login</h3>
 
 <div>
@@ -21,18 +20,16 @@
     {
         if (IsLoggedIn.Value)
         {
-            <p>Logged in successfully!</p>
-            @if (HasProfile.HasValue)
+            @if (HasProfile.HasValue && HasProfile.Value)
             {
-                if (HasProfile.Value)
-                {
-                    <p>Profile exists.</p>
-                }
-                else
-                {
-                    <a href="/create-profile">Create a profile</a>
-                }
-                <p><a href="/">Home</a></p>
+                <p>Logged in successfully!</p>
+                <p>You have a profile.</p>
+                <button @onclick="GoToProfileSelection">Go to Profile Selection</button> //change this to go the page where the user can choose from different profiles and like from a list
+            }
+            else if (HasProfile.HasValue && !HasProfile.Value)
+            {
+                <p>Logged in successfully, but it seems like you don't have a profile.</p>
+                <p><button @onclick="CreateProfile">Click here to create a profile</button></p>
             }
         }
         else
@@ -80,5 +77,15 @@
             IsLoggedIn = false;
             ErrorMessage = ex.Message;
         }
+    }
+
+    private void GoToProfileSelection()
+    {
+        Navigation.NavigateTo("/profile-selection");
+    }
+
+    private void CreateProfile()
+    {
+        Navigation.NavigateTo("/create-profile");
     }
 }

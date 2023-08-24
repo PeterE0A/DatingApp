@@ -34,7 +34,28 @@ namespace DatingApp.Services
         public async Task<bool> CheckForProfileAsync(string username)
         {
             return await _databaseRepository.CheckForProfileAsync(username);
+            //bool profileExists = await _databaseRepository.CheckForProfileAsync(username);
+            //return profileExists;
         }
+
+
+
+
+        public async Task<List<dynamic>> GetAllProfilesAsync()
+        {
+            return await _databaseRepository.GetAllProfilesAsync();
+        }
+
+
+        public async Task<dynamic> GetProfileByIdAsync(int userId)
+        {
+            dynamic profile = await _databaseRepository.GetProfileByIdAsync(userId);
+            return profile;
+        }
+
+
+
+
 
 
 
@@ -185,7 +206,15 @@ namespace DatingApp.Services
 
 
 
+        //public async Task<List<dynamic>> GetAllProfilesAsync()
+        //{
+        //    return await _databaseRepository.GetAllProfilesAsync();
+        //}
 
+        //public async Task<dynamic> GetProfileByIdAsync(int userId)
+        //{
+        //    return await _databaseRepository.GetProfileByIdAsync(userId);
+        //}
 
 
 

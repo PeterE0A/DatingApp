@@ -218,17 +218,141 @@ namespace DatingApp.Repositories
             {
                 await connection.OpenAsync();
 
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM Users u JOIN UserProfiles up ON u.UserID = up.UserID WHERE u.Username = @Username", connection))
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Users u JOIN UserProfiles up ON u.Username = up.FullName WHERE u.Username = @Username", connection))
                 {
                     command.Parameters.AddWithValue("@Username", username);
 
                     var result = await command.ExecuteScalarAsync();
-                    var profileCount = result as int? ?? 0;
+                    var profileCount = Convert.ToInt32(result);
 
                     return profileCount > 0;
                 }
             }
         }
+
+
+
+        //public async Task<List<dynamic>> GetAllProfilesAsync()
+        //{
+        //    using (var connection = new SqlConnection(_connectionString))
+        //    {
+        //        await connection.OpenAsync();
+
+        //        using (var command = new SqlCommand("SELECT UserID, FullName FROM UserProfiles", connection))
+        //        {
+        //            var profiles = new List<dynamic>();
+        //            using (var reader = await command.ExecuteReaderAsync())
+        //            {
+        //                while (await reader.ReadAsync())
+        //                {
+        //                    profiles.Add(new
+        //                    {
+        //                        UserId = reader.GetInt32(0),
+        //                        FullName = reader.GetString(1)
+        //                    });
+        //                }
+        //            }
+        //            return profiles;
+        //        }
+        //    }
+        //}
+
+
+        //public async Task<dynamic> GetProfileByIdAsync(int userId)
+        //{
+        //    using (var connection = new SqlConnection(_connectionString))
+        //    {
+        //        await connection.OpenAsync();
+
+        //        using (var command = new SqlCommand("SELECT FullName, Birthday, Gender, City, PostalCode FROM UserProfiles WHERE UserID = @UserId", connection))
+        //        {
+        //            command.Parameters.AddWithValue("@UserId", userId);
+
+        //            using (var reader = await command.ExecuteReaderAsync())
+        //            {
+        //                if (await reader.ReadAsync())
+        //                {
+        //                    return new
+        //                    {
+        //                        FullName = reader.GetString(0),
+        //                        Birthday = reader.GetDateTime(1),
+        //                        Gender = reader.GetString(2),
+        //                        City = reader.GetString(3),
+        //                        PostalCode = reader.GetString(4)
+        //                    };
+        //                }
+        //                return null;
+        //            }
+        //        }
+        //    }
+        //}
+
+        public async Task<List<dynamic>> GetAllProfilesAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT * FROM UserProfiles";
+
+                using (var command = new SqlCommand(query, connection))
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    var profiles = new List<dynamic>();
+                    while (await reader.ReadAsync())
+                    {
+                        var profile = new
+                        {
+                            UserId = reader.GetInt32(0),
+                            FullName = reader.GetString(1),
+                            Birthday = reader.GetDateTime(2),
+                            Gender = reader.GetString(3),
+                            City = reader.GetString(4),
+                            PostalCode = reader.GetString(5)
+                        };
+                        profiles.Add(profile);
+                    }
+
+                    return profiles;
+                }
+            }
+        }
+
+
+        public async Task<dynamic> GetProfileByIdAsync(int userId)
+        {
+            dynamic profile = null;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand("SELECT * FROM UserProfiles WHERE UserID = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            profile = new
+                            {
+                                UserID = reader.GetInt32(0),
+                                FullName = reader.GetString(1),
+                                Birthday = reader.GetDateTime(2),
+                                Gender = reader.GetString(3),
+                                City = reader.GetString(4),
+                                PostalCode = reader.GetString(5)
+                            };
+                        }
+                    }
+                }
+            }
+
+            return profile;
+        }
+
+
 
 
 
