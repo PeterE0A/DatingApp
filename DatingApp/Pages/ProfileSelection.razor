@@ -31,7 +31,7 @@
 @code {
     private List<dynamic> Profiles { get; set; } = new List<dynamic>();
     private int SelectedProfileUserId { get; set; } = -1;
-    private dynamic SelectedProfile { get; set; } = null;
+    private dynamic? SelectedProfile { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

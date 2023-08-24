@@ -327,7 +327,7 @@ namespace DatingApp.Repositories
             {
                 await connection.OpenAsync();
 
-                using (SqlCommand command = new SqlCommand("SELECT * FROM UserProfiles WHERE UserID = @UserId", connection))
+                using (SqlCommand command = new SqlCommand("SELECT UserID, FullName, Birthday, Gender, City, PostalCode FROM UserProfiles WHERE UserID = @UserId", connection))
                 {
                     command.Parameters.AddWithValue("@UserId", userId);
 
@@ -349,8 +349,10 @@ namespace DatingApp.Repositories
                 }
             }
 
-            return profile;
+            return profile ?? new { UserID = -1, FullName = "", Birthday = DateTime.MinValue, Gender = "", City = "", PostalCode = "" };
         }
+
+
 
 
 
