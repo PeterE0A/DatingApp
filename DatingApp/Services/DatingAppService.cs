@@ -41,24 +41,6 @@ namespace DatingApp.Services
 
 
 
-        public async Task<List<dynamic>> GetAllProfilesAsync()
-        {
-            return await _databaseRepository.GetAllProfilesAsync();
-        }
-
-
-        public async Task<dynamic> GetProfileByIdAsync(int userId)
-        {
-            dynamic profile = await _databaseRepository.GetProfileByIdAsync(userId);
-            return profile;
-        }
-
-
-
-
-
-
-
         public async Task<bool> CreateAccountAsync(string username, string password)
         {
             // Call repository method to create account
@@ -156,10 +138,11 @@ namespace DatingApp.Services
         //}
 
 
-        public async Task<bool> DeleteProfileAsync()
+        public async Task<bool> DeleteProfileAsync(int userId)
         {
-            return await _databaseRepository.DeleteProfileAsync();
+            return await _databaseRepository.DeleteProfileAsync(userId);
         }
+
 
         public async Task<bool> AddLikeAsync(int likerUserId, int likedUserId)
         {

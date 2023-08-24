@@ -7,26 +7,47 @@
 <p>Are you sure you want to delete your profile?</p>
 <button @onclick="DeleteProfileAsync">Delete Profile</button>
 
+<div>
+    @if (ProfileDeleted.HasValue)
+    {
+        if (ProfileDeleted.Value)
+        {
+            <p>Profile deleted successfully!</p>
+        }
+        else
+        {
+            <p>@ErrorMessage</p>
+        }
+    }
+</div>
+
 @code {
+    private bool? ProfileDeleted { get; set; }
+    private string? ErrorMessage { get; set; }
+
     private async Task DeleteProfileAsync()
     {
         try
         {
-            bool success = await DatingAppService.DeleteProfileAsync();
+            // You can replace this with the actual logic to get the logged-in user's ID
+            int userId = 1; // Replace with the actual user ID
+            bool success = await DatingAppService.DeleteProfileAsync(userId);
 
             if (success)
             {
-                Navigation.NavigateTo("/", forceLoad: true);
+                ProfileDeleted = true;
+                ErrorMessage = string.Empty;
             }
             else
             {
-                // Handle delete profile failure
-                Console.WriteLine("Error deleting profile.");
+                ProfileDeleted = false;
+                ErrorMessage = "Profile deletion failed.";
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ProfileDeleted = false;
+            ErrorMessage = ex.Message;
         }
     }
 }

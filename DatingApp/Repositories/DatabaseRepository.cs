@@ -164,7 +164,7 @@ namespace DatingApp.Repositories
 
 
 
-        public async Task<bool> DeleteProfileAsync()
+        public async Task<bool> DeleteProfileAsync(int userId)
         {
             try
             {
@@ -172,22 +172,22 @@ namespace DatingApp.Repositories
                 {
                     await connection.OpenAsync();
 
-                    using (var command = new SqlCommand("DeleteProfile", connection))
+                    using (var command = new SqlCommand("DELETE FROM UserProfiles WHERE UserID = @UserId", connection))
                     {
-                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@UserId", userId);
 
-                        int result = await command.ExecuteNonQueryAsync();
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                        return result > 0;
+                        return rowsAffected > 0;
                     }
                 }
             }
             catch (Exception)
             {
-                // Handle exception
-                return false;
+                return false; // Handle exceptions appropriately
             }
         }
+
 
 
         public async Task<bool> AddLikeAsync(int likerUserId, int likedUserId)
@@ -287,77 +287,7 @@ namespace DatingApp.Repositories
         //    }
         //}
 
-        public async Task<List<dynamic>> GetAllProfilesAsync()
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                var query = "SELECT * FROM UserProfiles";
-
-                using (var command = new SqlCommand(query, connection))
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    var profiles = new List<dynamic>();
-                    while (await reader.ReadAsync())
-                    {
-                        var profile = new
-                        {
-                            UserId = reader.GetInt32(0),
-                            FullName = reader.GetString(1),
-                            Birthday = reader.GetDateTime(2),
-                            Gender = reader.GetString(3),
-                            City = reader.GetString(4),
-                            PostalCode = reader.GetString(5)
-                        };
-                        profiles.Add(profile);
-                    }
-
-                    return profiles;
-                }
-            }
-        }
-
-
-        public async Task<dynamic> GetProfileByIdAsync(int userId)
-        {
-            dynamic profile = null;
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                using (SqlCommand command = new SqlCommand("SELECT UserID, FullName, Birthday, Gender, City, PostalCode FROM UserProfiles WHERE UserID = @UserId", connection))
-                {
-                    command.Parameters.AddWithValue("@UserId", userId);
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            profile = new
-                            {
-                                UserID = reader.GetInt32(0),
-                                FullName = reader.GetString(1),
-                                Birthday = reader.GetDateTime(2),
-                                Gender = reader.GetString(3),
-                                City = reader.GetString(4),
-                                PostalCode = reader.GetString(5)
-                            };
-                        }
-                    }
-                }
-            }
-
-            return profile ?? new { UserID = -1, FullName = "", Birthday = DateTime.MinValue, Gender = "", City = "", PostalCode = "" };
-        }
-
-
-
-
-
-
-
+   
 
 
 

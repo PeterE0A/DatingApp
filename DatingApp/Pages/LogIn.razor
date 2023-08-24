@@ -24,7 +24,7 @@
             {
                 <p>Logged in successfully!</p>
                 <p>You have a profile.</p>
-                <button @onclick="GoToProfileSelection">Go to Profile Selection</button> //change this to go the page where the user can choose from different profiles and like from a list
+                <button @onclick="GoToHome">Go to Home</button> //change this to go the page where the user can choose from different profiles and like from a list
             }
             else if (HasProfile.HasValue && !HasProfile.Value)
             {
@@ -79,9 +79,9 @@
         }
     }
 
-    private void GoToProfileSelection()
+    private void GoToHome()
     {
-        Navigation.NavigateTo("/profile-selection");
+        Navigation.NavigateTo("/");
     }
 
     private void CreateProfile()
