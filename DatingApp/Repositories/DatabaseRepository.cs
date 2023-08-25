@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using DatingApp.Entities;
+
 
 namespace DatingApp.Repositories
 {
@@ -310,59 +312,68 @@ namespace DatingApp.Repositories
 
         //--------------------------------------------------------------
 
-        public Profile GetProfile(Guid id)
+        public Profile GetProfile(int id)
         {
             Profile profile = new Profile();
-            profile.Id = id;
+            profile.UserID = id;
 
             SqlConnection sqlCon = null;
-            String SqlconString = myDbConnectionString;
+            String SqlconString = _connectionString;
             using (sqlCon = new SqlConnection(SqlconString))
             {
                 sqlCon.Open();
-                SqlCommand sql_cmnd = new SqlCommand("usp_GetEmployee", sqlCon);
+                SqlCommand sql_cmnd = new SqlCommand("usp_GetUserProfile", sqlCon);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@Id", SqlDbType.UniqueIdentifier).Value = employee.Id;
+                sql_cmnd.Parameters.AddWithValue("@UserID", SqlDbType.UniqueIdentifier).Value = profile.UserID;
                 using (SqlDataReader sdr = sql_cmnd.ExecuteReader())
                 {
                     while (sdr.Read())
                     {
 
-                        employee.Id = Guid.Parse(sdr["Id"].ToString());
-                        employee.Name = Convert.ToString(sdr["Name"]);
+                        profile.UserID = int.Parse(sdr["UserID"].ToString());
+                        profile.FullName = Convert.ToString(sdr["FullName"]);
+                        profile.Birthday = Convert.ToDateTime(sdr["Birthday"]);
+                        profile.Gender = Convert.ToString(sdr["Gender"]);
+                        profile.City = Convert.ToString(sdr["City"]);
+                        profile.PostalCode = Convert.ToString(sdr["PostalCode"]);
+
                     }
                 }
                 sqlCon.Close();
-                return employee;
+                return profile;
             }
         }
 
 
 
-        public List<Employee> GetEmployees()
+        public List<Profile> GetProfiles()
         {
-            List<Employee> employees = new List<Employee>();
+            List<Profile> profiles = new List<Profile>();
             SqlConnection sqlCon = null;
-            string SqlconString = myDbConnectionString;
+            string SqlconString = _connectionString;
             using (sqlCon = new SqlConnection(SqlconString))
             {
                 sqlCon.Open();
-                SqlCommand sql_cmnd = new SqlCommand("usp_AllEmployees", sqlCon);
+                SqlCommand sql_cmnd = new SqlCommand("usp_AllProfiles", sqlCon);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 using (SqlDataReader sdr = sql_cmnd.ExecuteReader())
                 {
 
                     while (sdr.Read())
                     {
-                        employees.Add(new Employee
+                        profiles.Add(new Profile
                         {
-                            Id = Guid.Parse(sdr["Id"].ToString()),
-                            Name = Convert.ToString(sdr["Name"]),
+                            UserID = int.Parse(sdr["UserID"].ToString()),
+                            FullName = Convert.ToString(sdr["FullName"]),
+                            Birthday = Convert.ToDateTime(sdr["Birthday"]),
+                            Gender = Convert.ToString(sdr["Gender"]),
+                            City = Convert.ToString(sdr["City"]),
+                            PostalCode = Convert.ToString(sdr["PostalCode"]),
                         });
                     }
                 }
                 sqlCon.Close();
-                return employees;
+                return profiles;
             }
         }
 

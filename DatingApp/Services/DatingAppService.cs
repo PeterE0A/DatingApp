@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DatingApp.Repositories;
 using System.Data.SqlClient;
 using DatingApp.Services;
+using DatingApp.Entities;
 
 namespace DatingApp.Services
 {
@@ -31,15 +32,15 @@ namespace DatingApp.Services
 
 
 
-        public Profile? GetProfile(Guid id)
+        public Profile? GetProfile(int id)
         {
-            Profile FindDBProfile = _repository.GetProfile(id);
+            Profile FindDBProfile = _databaseRepository.GetProfile(id);
             return FindDBProfile;
         }
 
         public List<Profile> GetProfiles()
         {
-            var emps = _repository.GetProfiles();
+            var emps = _databaseRepository.GetProfiles();
             return emps;
         }
 

@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using DatingApp.Entities;
+
 
 namespace DatingApp.Repositories
 {
@@ -7,7 +9,7 @@ namespace DatingApp.Repositories
         //---------------------------------------------------------------
 
         List<Profile> GetProfiles();
-        Profile GetProfile(Guid id);
+        Profile GetProfile(int id);
 
         //-----------------------------------------------------------
 

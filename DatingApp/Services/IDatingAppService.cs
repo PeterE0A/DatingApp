@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DatingApp.Data;
+using DatingApp.Entities;
 
 namespace DatingApp.Services
 {
@@ -8,7 +9,7 @@ namespace DatingApp.Services
         //-----------------------------------------
         List<Profile> GetProfiles();
 
-        Profile GetProfile(Guid id);
+        Profile GetProfile(int id);
 
         //---------------------------------------
         Task<bool> DeleteProfileAsync(int userId);

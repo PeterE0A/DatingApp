@@ -2,12 +2,12 @@
 {
     public class Profile
     {
-        public Guid Id { get; set; }
-        private string? FullName { get; set; }
-        private DateTime Birthday { get; set; }
-        private string? Gender { get; set; }
-        private string? City { get; set; }
-        private string? PostalCode { get; set; }
+        public int UserID { get; set; }
+        public string? FullName { get; set; }
+        public DateTime Birthday { get; set; }
+        public string? Gender { get; set; }
+        public string? City { get; set; }
+        public string? PostalCode { get; set; }
 
 
     }

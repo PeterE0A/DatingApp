@@ -2,9 +2,10 @@
 @inject IDatingAppService DatingAppService
 @using DatingApp.Data 
 @using DatingApp.Services 
+@using DatingApp.Entities;
 
 
-<h1>Like Profile</h1>
+<h1>All Profiles</h1>
 <br />
 
 
@@ -17,25 +18,22 @@
             <td>Gender</td>
             <td>City</td>
             <td>PostalCode</td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var Profile in Profiles)
+        @foreach (var profile in profiles)
         {
             <tr>
-                <td>@Profile.UserID</td>
-                <td>@Profile.FullName</td>
-                <td>@Profile.Birthday</td>
-                <td>@Profile.Gender</td>
-                <td>@Profile.City</td>
-                <td>@Profile.PostalCode</td>
+                <td>@profile.UserID</td>
+                <td>@profile.FullName</td>
+                <td>@profile.Birthday</td>
+                <td>@profile.Gender</td>
+                <td>@profile.City</td>
+                <td>@profile.PostalCode</td>
+               
                 <td>
-                    <a href="editemployee/@Profile.Id">
-                        Edit    
-                    </a>
-                </td>
-                <td>
-                    <button class="btn btn-primary" @onclick = "@(e => OnDelete(employee.Id))">Like</button>
+                    <button class="btn btn-primary" @*@onclick = ""*@>Like</button>
                 </td>
             </tr>
         }
@@ -43,43 +41,15 @@
 </table>
 
 @code {
-    private List<User> Users = new List<User>();
-    private string SelectedUsername { get; set; }
-    private UserWithProfile UserProfile { get; set; }
-    private UserWithProfile CurrentUserProfile { get; set; }
-    private bool? Liked { get; set; }
-    private string LikeMessage { get; set; }
 
-    protected override async Task OnInitializedAsync()
+
+    private List<Profile> profiles;
+
+    protected override void OnInitialized()
     {
-        Users = await DatingAppService.GetUsersAsync();
-        CurrentUserProfile = await DatingAppService.GetLoggedInUserAsync();
+        profiles = DatingAppService.GetProfiles();
     }
 
-    private async Task LikeProfileAsync()
-    {
-        try
-        {
-            int likerUserId = CurrentUserProfile.UserID;
-            UserWithProfile likedUser = await DatingAppService.GetUserWithProfileByUsernameAsync(SelectedUsername);
-
-            bool success = await DatingAppService.AddLikeAsync(likerUserId, likedUser.UserID);
-
-            if (success)
-            {
-                Liked = true;
-                LikeMessage = "You liked the profile!";
-            }
-            else
-            {
-                Liked = false;
-                LikeMessage = "Liking profile failed.";
-            }
-        }
-        catch (Exception ex)
-        {
-            Liked = false;
-            LikeMessage = ex.Message;
-        }
-    }
+  
+    
 }
