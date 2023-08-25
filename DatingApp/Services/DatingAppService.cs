@@ -27,6 +27,22 @@ namespace DatingApp.Services
         //    return password == storedPassword;
         //}
 
+        private List<Profile> profiles = new List<Profile>();
+
+
+
+        public Profile? GetProfile(Guid id)
+        {
+            Profile FindDBProfile = _repository.GetProfile(id);
+            return FindDBProfile;
+        }
+
+        public List<Profile> GetProfiles()
+        {
+            var emps = _repository.GetProfiles();
+            return emps;
+        }
+
 
 
 
@@ -199,8 +215,11 @@ namespace DatingApp.Services
         //    return await _databaseRepository.GetProfileByIdAsync(userId);
         //}
 
+        //--------------------------------------------------------------------------
 
+   
 
+        //-----------------------------------------------------------------------
 
 
     }

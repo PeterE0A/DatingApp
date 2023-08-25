@@ -166,27 +166,21 @@ namespace DatingApp.Repositories
 
         public async Task<bool> DeleteProfileAsync(int userId)
         {
-            try
+            using (var connection = new SqlConnection(_connectionString))
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using (var command = new SqlCommand("DeleteProfile", connection))
                 {
-                    await connection.OpenAsync();
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserID", userId);
 
-                    using (var command = new SqlCommand("DELETE FROM UserProfiles WHERE UserID = @UserId", connection))
-                    {
-                        command.Parameters.AddWithValue("@UserId", userId);
+                    connection.Open();
+                    int result = await command.ExecuteNonQueryAsync();
 
-                        int rowsAffected = await command.ExecuteNonQueryAsync();
-
-                        return rowsAffected > 0;
-                    }
+                    return result > 0;
                 }
             }
-            catch (Exception)
-            {
-                return false; // Handle exceptions appropriately
-            }
         }
+
 
 
 
@@ -309,5 +303,83 @@ namespace DatingApp.Repositories
                 }
             }
         }
+
+
+
+
+
+        //--------------------------------------------------------------
+
+        public Profile GetProfile(Guid id)
+        {
+            Profile profile = new Profile();
+            profile.Id = id;
+
+            SqlConnection sqlCon = null;
+            String SqlconString = myDbConnectionString;
+            using (sqlCon = new SqlConnection(SqlconString))
+            {
+                sqlCon.Open();
+                SqlCommand sql_cmnd = new SqlCommand("usp_GetEmployee", sqlCon);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@Id", SqlDbType.UniqueIdentifier).Value = employee.Id;
+                using (SqlDataReader sdr = sql_cmnd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+
+                        employee.Id = Guid.Parse(sdr["Id"].ToString());
+                        employee.Name = Convert.ToString(sdr["Name"]);
+                    }
+                }
+                sqlCon.Close();
+                return employee;
+            }
+        }
+
+
+
+        public List<Employee> GetEmployees()
+        {
+            List<Employee> employees = new List<Employee>();
+            SqlConnection sqlCon = null;
+            string SqlconString = myDbConnectionString;
+            using (sqlCon = new SqlConnection(SqlconString))
+            {
+                sqlCon.Open();
+                SqlCommand sql_cmnd = new SqlCommand("usp_AllEmployees", sqlCon);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                using (SqlDataReader sdr = sql_cmnd.ExecuteReader())
+                {
+
+                    while (sdr.Read())
+                    {
+                        employees.Add(new Employee
+                        {
+                            Id = Guid.Parse(sdr["Id"].ToString()),
+                            Name = Convert.ToString(sdr["Name"]),
+                        });
+                    }
+                }
+                sqlCon.Close();
+                return employees;
+            }
+        }
+
+        //---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

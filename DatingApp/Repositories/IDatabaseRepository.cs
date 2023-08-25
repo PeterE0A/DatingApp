@@ -4,7 +4,12 @@ namespace DatingApp.Repositories
 {
     public interface IDatabaseRepository
     {
+        //---------------------------------------------------------------
 
+        List<Profile> GetProfiles();
+        Profile GetProfile(Guid id);
+
+        //-----------------------------------------------------------
 
         Task<bool> DeleteProfileAsync(int userId);
 

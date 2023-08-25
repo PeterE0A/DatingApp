@@ -5,9 +5,12 @@ namespace DatingApp.Services
 {
     public interface IDatingAppService
     {
+        //-----------------------------------------
+        List<Profile> GetProfiles();
 
+        Profile GetProfile(Guid id);
 
-
+        //---------------------------------------
         Task<bool> DeleteProfileAsync(int userId);
 
         Task<bool> CheckForProfileAsync(string username);
