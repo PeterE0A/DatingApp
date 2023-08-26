@@ -1,4 +1,4 @@
-﻿@page "/like-profile"
+﻿@page "/like-profile/{LoggedInUserId:int}"
 @inject IDatingAppService DatingAppService
 @using DatingApp.Entities
 
@@ -35,7 +35,7 @@
                 <td>@profile.City</td>
                 <td>@profile.PostalCode</td>
                 <td>
-                    <button class="btn btn-primary" @onclick="() => LikeProfileAsync(profile)">@(profile.IsLiked ? "Liked" : "Like")</button>
+                    <button class="btn btn-primary" @onclick="() => LikeProfileAsync(profile, LoggedInUserId)">@(profile.IsLiked ? "Liked" : "Like")</button>
                 </td>
             </tr>
         }
@@ -46,14 +46,14 @@
     private List<Profile> profiles;
     private List<Profile> filteredProfiles = new List<Profile>();
     private string? selectedGender;
-    private int loggedInUserId;
+   
 
-    [Parameter]
-    public int UserId { get; set; } // Bind the user ID from the URL parameter
+    [Parameter] public int LoggedInUserId { get; set; }
+    
 
     protected override async Task OnInitializedAsync()
     {
-        loggedInUserId = UserId; // Assign the logged-in user's ID
+        
         profiles = DatingAppService.GetProfiles(); // Make sure to await the method call
         await UpdateFilteredProfiles();
     }
@@ -76,10 +76,10 @@
        await UpdateFilteredProfiles();
     }
 
-     private async Task LikeProfileAsync(Profile profile)
+     private async Task LikeProfileAsync(Profile profile, int likerUserId)
     {
         // Assuming you have an AddLikeAsync method in IDatingAppService
-        bool success = await DatingAppService.AddLikeAsync(loggedInUserId, profile.UserID);
+        bool success = await DatingAppService.AddLikeAsync(likerUserId, profile.UserID);
 
         if (success)
         {

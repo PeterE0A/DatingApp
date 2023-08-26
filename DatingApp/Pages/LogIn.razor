@@ -42,7 +42,7 @@
 @code {
     private string? Username { get; set; }
     private string? Password { get; set; }
-    private bool? IsLoggedIn { get; set; }
+    private bool? IsLoggedIn { get; set; } 
     private string? ErrorMessage { get; set; }
     private bool? HasProfile { get; set; }
 
@@ -58,9 +58,11 @@
                 {
                     IsLoggedIn = true;
                     ErrorMessage = string.Empty;
-                    int? userId = await DatingAppService.GetUserIdByUsername(Username);
-                    Navigation.NavigateTo($"/like-profile/{userId}");
-                    GoToLikeProfile();
+                    HasProfile = await DatingAppService.CheckForProfileAsync(Username);
+                        int? loggedInUserId = await DatingAppService.GetUserIdByUsername(Username);
+                      Navigation.NavigateTo($"/like-profile/{loggedInUserId}"); 
+                   // Navigation.NavigateTo($"/like-profile/{userId}");
+                    
                 }
                 else
                 {
