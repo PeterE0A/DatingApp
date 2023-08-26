@@ -7,11 +7,11 @@ namespace DatingApp.Repositories
     public interface IDatabaseRepository
     {
         //---------------------------------------------------------------
-
+        Task<int?> GetUserIdByUsername(string username);
+        //-----------------------------------------------------------
+        Task<List<Profile>> GetProfilesByGender(string gender);
         List<Profile> GetProfiles();
         Profile GetProfile(int id);
-
-        //-----------------------------------------------------------
 
         Task<bool> DeleteProfileAsync(int userId);
 

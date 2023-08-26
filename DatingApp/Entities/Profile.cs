@@ -9,6 +9,6 @@
         public string? City { get; set; }
         public string? PostalCode { get; set; }
 
-
+        public bool IsLiked { get; set; }
     }
 }

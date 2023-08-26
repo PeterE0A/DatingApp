@@ -377,10 +377,74 @@ namespace DatingApp.Repositories
             }
         }
 
+
+
+        public async Task<List<Profile>> GetProfilesByGender(string gender)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand("usp_GetProfilesByGender", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Gender", gender);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        List<Profile> profiles = new List<Profile>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            profiles.Add(new Profile
+                            {
+                                UserID = (int)reader["UserID"],
+                                FullName = (string)reader["FullName"],
+                                Birthday = (DateTime)reader["Birthday"],
+                                Gender = (string)reader["Gender"],
+                                City = (string)reader["City"],
+                                PostalCode = (string)reader["PostalCode"]
+                            });
+                        }
+
+                        return profiles;
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
         //---------------------------------------------------------
 
 
 
+        public async Task<int?> GetUserIdByUsername(string username)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new SqlCommand("SELECT UserID FROM Users WHERE Username = @Username", connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    var result = await command.ExecuteScalarAsync();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return (int)result;
+                    }
+                    else
+                    {
+                        return null; // User not found
+                    }
+                }
+            }
+        }
 
 
 

@@ -46,6 +46,12 @@ namespace DatingApp.Services
 
 
 
+        public async Task<List<Profile>> GetProfilesByGender(string gender)
+        {
+            return await _databaseRepository.GetProfilesByGender(gender);
+        }
+
+
 
 
         public async Task<bool> CheckForProfileAsync(string username)
@@ -218,7 +224,10 @@ namespace DatingApp.Services
 
         //--------------------------------------------------------------------------
 
-   
+        public async Task<int?> GetUserIdByUsername(string username)
+        {
+            return await _databaseRepository.GetUserIdByUsername(username);
+        }
 
         //-----------------------------------------------------------------------
 
