@@ -1,49 +1,65 @@
-﻿@page "/check-for-match"
+﻿@page "/check-for-match/{LoggedInUserId:int}"
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
+@using DatingApp.Entities
 
-<h3>Check For Match</h3>
+<h3>Your Matches</h3>
 
-<div>
-    <label for="userId1">User ID 1:</label>
-    <input type="text" id="userId1" @bind="@UserId1" />
-</div>
-<div>
-    <label for="userId2">User ID 2:</label>
-    <input type="text" id="userId2" @bind="@UserId2" />
-</div>
-<button @onclick="CheckForMatchAsync">Check For Match</button>
+<p>You are checking matches for User ID: @LoggedInUserId</p>
 
-<div>
-    @if (HasMatch.HasValue)
-    {
-        if (HasMatch.Value)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Matched UserID</th>
+            <th>Matched FullName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var match in matchedProfiles)
         {
-            <p>There is a match!</p>
+            <tr>
+                <td>@match.UserID</td>
+                <td>@match.FullName</td>
+            </tr>
         }
-        else
-        {
-            <p>No match found.</p>
-        }
-    }
-</div>
+    </tbody>
+</table>
+
+<button @onclick="GoToLikeProfile">Go to Like Profile</button>
 
 @code {
-    private int UserId1 { get; set; }
-    private int UserId2 { get; set; }
-    private bool? HasMatch { get; set; }
+    [Parameter] public int LoggedInUserId { get; set; }
 
-    private async Task CheckForMatchAsync()
+    private List<Profile> matchedProfiles = new List<Profile>();
+
+    protected override async Task OnInitializedAsync()
     {
-        try
+        matchedProfiles = await LoadMatchedProfiles(LoggedInUserId);
+    }
+
+    private async Task<List<Profile>> LoadMatchedProfiles(int userId)
+    {
+        List<Profile> profiles = DatingAppService.GetProfiles();
+        List<Profile> matches = new List<Profile>();
+
+        foreach (var profile in profiles)
         {
-            bool match = await DatingAppService.CheckForMatchAsync(UserId1, UserId2);
-            HasMatch = match;
+            if (profile.UserID != userId)
+            {
+                bool isMatch = await DatingAppService.CheckForMatchAsync(userId, profile.UserID);
+
+                if (isMatch)
+                {
+                    matches.Add(profile);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            
-        }
+
+        return matches;
+    }
+
+    private void GoToLikeProfile()
+    {
+        Navigation.NavigateTo($"/like-profile/{LoggedInUserId}");
     }
 }

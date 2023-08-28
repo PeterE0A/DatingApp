@@ -283,7 +283,7 @@ namespace DatingApp.Repositories
         //    }
         //}
 
-   
+
 
 
 
@@ -301,10 +301,18 @@ namespace DatingApp.Repositories
                     connection.Open();
                     await command.ExecuteNonQueryAsync();
 
-                    return (bool)command.Parameters["@Match"].Value;
+                    var matchValue = command.Parameters["@Match"].Value;
+
+                    if (matchValue == DBNull.Value)
+                    {
+                        return false; // No match found
+                    }
+
+                    return (bool)matchValue;
                 }
             }
         }
+
 
 
 

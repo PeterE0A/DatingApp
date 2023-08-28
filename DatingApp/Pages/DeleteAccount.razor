@@ -1,4 +1,4 @@
-﻿@page "/delete-account"
+﻿@page "/delete-account/{UserId:int}"
 @using DatingApp.Services
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
@@ -7,10 +7,6 @@
 
 <div>
     <p>Are you sure you want to delete your account?</p>
-</div>
-<div>
-    <label for="userId">User ID:</label>
-    <input type="number" id="userId" @bind="@UserId" />
 </div>
 <button @onclick="DeleteAccountAsync">Delete Account</button>
 <button @onclick="GoBack">Go Back</button>
@@ -30,9 +26,14 @@
 </div>
 
 @code {
-    private int UserId { get; set; }
+    [Parameter] public int UserId { get; set; }
     private bool? IsAccountDeleted { get; set; }
     private string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DeleteAccountAsync(); // Automatically initiate the account deletion when the page loads
+    }
 
     private async Task DeleteAccountAsync()
     {
