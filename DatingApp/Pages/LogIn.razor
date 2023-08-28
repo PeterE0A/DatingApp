@@ -24,10 +24,11 @@
             {
                 <p>Logged in successfully!</p>
                 <p>You have a profile.</p>
-                <button @onclick="GoToLikeProfile">Go to Like Profile</button>
+                <button @onclick="GoToLikeProfileAsync">Go to Like Profile</button>
             }
             else if (HasProfile.HasValue && !HasProfile.Value)
             {
+
                 <p>Logged in successfully, but it seems like you don't have a profile.</p>
                 <p><button @onclick="CreateProfile">Click here to create a profile</button></p>
             }
@@ -40,11 +41,11 @@
 </div>
 
 @code {
-    private string? Username { get; set; }
-    private string? Password { get; set; }
-    private bool? IsLoggedIn { get; set; } 
-    private string? ErrorMessage { get; set; }
-    private bool? HasProfile { get; set; }
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public bool? IsLoggedIn { get; set; } 
+    public string? ErrorMessage { get; set; }
+    public bool? HasProfile { get; set; }
 
     private async Task LogInAsync()
     {
@@ -59,10 +60,6 @@
                     IsLoggedIn = true;
                     ErrorMessage = string.Empty;
                     HasProfile = await DatingAppService.CheckForProfileAsync(Username);
-                        int? loggedInUserId = await DatingAppService.GetUserIdByUsername(Username);
-                      Navigation.NavigateTo($"/like-profile/{loggedInUserId}"); 
-                   // Navigation.NavigateTo($"/like-profile/{userId}");
-                    
                 }
                 else
                 {
@@ -82,10 +79,21 @@
             ErrorMessage = ex.Message;
         }
     }
-    private void GoToLikeProfile()
+    private async Task GoToLikeProfileAsync()
     {
-        // Redirect to the LikeProfile page
-        Navigation.NavigateTo("/like-profile");
+        if (IsLoggedIn.HasValue && IsLoggedIn.Value && HasProfile.HasValue)
+        {
+            if (HasProfile.Value)
+            {
+                int? loggedInUserId = await DatingAppService.GetUserIdByUsername(Username);
+                Navigation.NavigateTo($"/like-profile/{loggedInUserId}");
+            }
+            else
+            {
+                // Navigation.NavigateTo("/create-profile");
+                CreateProfile();
+            }
+        }
     }
 
     private void CreateProfile()

@@ -13,6 +13,10 @@
 
     <main>
         <div class="top-row px-4">
+            @if (IsLoggedIn)
+            {
+               <a href="/logout">Logout</a> 
+            }
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 
@@ -29,6 +33,11 @@
     </main>
 </div>
 
+@code {
+
+
+
+}
 <style>
     /* Add your existing styles here */
 
@@ -42,5 +51,5 @@
 
 @code {
 
-
+    public bool IsLoggedIn { get; set; }
 }      
