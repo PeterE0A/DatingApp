@@ -1,5 +1,6 @@
 ﻿@page "/like-profile/{LoggedInUserId:int}"
 @inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
 @using DatingApp.Entities
 
 
@@ -42,18 +43,21 @@
     </tbody>
 </table>
 
+<button class="btn btn-primary" @onclick="CheckMatches">Check Matches</button>
+
+
 @code {
     private List<Profile> profiles;
     private List<Profile> filteredProfiles = new List<Profile>();
     private string? selectedGender;
-   
+
 
     [Parameter] public int LoggedInUserId { get; set; }
-    
+
 
     protected override async Task OnInitializedAsync()
     {
-        
+
         profiles = DatingAppService.GetProfiles(); // Make sure to await the method call
         await UpdateFilteredProfiles();
     }
@@ -73,10 +77,10 @@
     private async Task UpdateGenderFilter(ChangeEventArgs e)
     {
         selectedGender = e.Value.ToString();
-       await UpdateFilteredProfiles();
+        await UpdateFilteredProfiles();
     }
 
-     private async Task LikeProfileAsync(Profile profile, int likerUserId)
+    private async Task LikeProfileAsync(Profile profile, int likerUserId)
     {
         // Assuming you have an AddLikeAsync method in IDatingAppService
         bool success = await DatingAppService.AddLikeAsync(likerUserId, profile.UserID);
@@ -86,4 +90,10 @@
             profile.IsLiked = true; // Assuming you have an IsLiked property in the Profile class
         }
     }
+
+    private void CheckMatches()
+    {
+        Navigation.NavigateTo("/check-for-match/" + LoggedInUserId);
+    }
+
 }
