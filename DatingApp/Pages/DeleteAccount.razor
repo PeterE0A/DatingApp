@@ -1,45 +1,143 @@
-﻿@page "/delete-account/{UserId:int}"
+﻿@page "/delete-account/{LoggedInUserId:int}"
 @using DatingApp.Services
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
 
-<h3>Delete Account</h3>
+<div class="container">
+    <div class="card">
+        <div class="content">
+            <h3 class="title">Delete Account</h3>
+            <p class="subtitle">Are you sure you want to delete your account?</p>
+        </div>
 
-<div>
-    <p>Are you sure you want to delete your account?</p>
+        <form class="form">
+            <div class="buttons">
+                <button class="cancel-button" @onclick="GoBack">Cancel</button>
+                <button class="delete-button" @onclick="DeleteAccountAsync">Delete Account</button>
+            </div>
+        </form>
+
+        <div class="result-message">
+            @if (IsAccountDeleted.HasValue)
+            {
+                <p class="@(IsAccountDeleted.Value ? "success" : "error")">
+                    @(IsAccountDeleted.Value ? "Account deleted successfully!" : ErrorMessage)
+                </p>
+            }
+        </div>
+    </div>
 </div>
-<button @onclick="DeleteAccountAsync">Delete Account</button>
-<button @onclick="GoBack">Go Back</button>
 
-<div>
-    @if (IsAccountDeleted.HasValue)
-    {
-        if (IsAccountDeleted.Value)
-        {
-            <p>Account deleted successfully!</p>
-        }
-        else
-        {
-            <p>@ErrorMessage</p>
-        }
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
     }
-</div>
+
+    /* Container Styles */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding-top: 50px; /* Add spacing from the top */
+    }
+
+    /* Card Styles */
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    /* Content Styles */
+    .content {
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        color: #666;
+    }
+
+    /* Form Styles */
+    .form {
+        margin-bottom: 20px;
+    }
+
+    /* Button Styles */
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .cancel-button,
+    .delete-button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .cancel-button {
+        background-color: #f0f1f6;
+        color: #666;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .delete-button {
+        background-color: #ff5c5c;
+        color: #fff;
+        border: none;
+        margin-left: 10px;
+    }
+
+    /* Result Message Styles */
+    .result-message {
+        margin-top: 20px;
+    }
+
+    .success {
+        color: #28a745;
+    }
+
+    .error {
+        color: #dc3545;
+    }
+</style>
 
 @code {
-    [Parameter] public int UserId { get; set; }
+    [Parameter] public int LoggedInUserId { get; set; }
     private bool? IsAccountDeleted { get; set; }
     private string? ErrorMessage { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await DeleteAccountAsync(); // Automatically initiate the account deletion when the page loads
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await DeleteAccountAsync(); // Automatically initiate the account deletion when the page loads
+    //}
 
     private async Task DeleteAccountAsync()
     {
         try
         {
-            bool success = await DatingAppService.DeleteAccountAsync(UserId);
+            bool success = await DatingAppService.DeleteAccountAsync(LoggedInUserId);
 
             if (success)
             {

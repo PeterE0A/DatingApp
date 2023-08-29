@@ -3,42 +3,104 @@
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
 
-<h3>Login</h3>
+<div class="container">
+    <div class="card p-4 shadow">
+        <h3 class="text-primary mb-4">Log In</h3>
 
-<div>
-    <label for="username">Username:</label>
-    <input type="text" id="username" @bind="@Username" />
-</div>
-<div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" @bind="@Password" />
-</div>
-<button @onclick="LogInAsync">Log In</button>
+        <div class="form-group mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" @bind="@Username" class="form-control" placeholder="Enter your username" />
+        </div>
 
-<div>
-    @if (IsLoggedIn.HasValue)
-    {
-        if (IsLoggedIn.Value)
-        {
-            @if (HasProfile.HasValue && HasProfile.Value)
+        <div class="form-group mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" @bind="@Password" class="form-control" placeholder="Enter your password" />
+        </div>
+
+        <button @onclick="LogInAsync" class="btn btn-primary btn-block mb-3">Log In</button>
+
+        <div class="text-center">
+            @if (IsLoggedIn.HasValue)
             {
-                <p>Logged in successfully!</p>
-                <p>You have a profile.</p>
-                <button @onclick="GoToLikeProfileAsync">Go to Like Profile</button>
+                if (IsLoggedIn.Value)
+                {
+                    @if (HasProfile.HasValue && HasProfile.Value)
+                    {
+                        <p class="success-message">Logged in successfully!</p>
+                        <p>You have a profile.</p>
+                        <button @onclick="GoToLikeProfileAsync" class="btn btn-success btn-block">Go to Like Profile</button>
+                    }
+                    else if (HasProfile.HasValue && !HasProfile.Value)
+                    {
+                        <p class="success-message">Logged in successfully, but it seems like you don't have a profile.</p>
+                        <button @onclick="CreateProfile" class="btn btn-primary btn-block">Create Profile</button>
+                    }
+                }
+                else
+                {
+                    <p class="error-message">@ErrorMessage</p>
+                }
             }
-            else if (HasProfile.HasValue && !HasProfile.Value)
-            {
+        </div>
 
-                <p>Logged in successfully, but it seems like you don't have a profile.</p>
-                <p><button @onclick="CreateProfile">Click here to create a profile</button></p>
-            }
-        }
-        else
-        {
-            <p>@ErrorMessage</p>
-        }
+        <p class="mt-3 text-center">Don't have an account? <a href="/create-account" class="text-primary">Create one</a>.</p>
+    </div>
+</div>
+
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
     }
-</div>
+
+    /* Container Styles */
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    /* Existing styles */
+    .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .shadow {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Additional styles for this page */
+    .text-primary {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .success-message {
+        color: #28a745;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+</style>
+
 
 @code {
     public string? Username { get; set; }
@@ -47,6 +109,10 @@
     public string? ErrorMessage { get; set; }
     public bool? HasProfile { get; set; }
 
+ //_----------
+    //private int LoggedInUserId { get; set; }
+
+    //-------
     private async Task LogInAsync()
     {
         try
@@ -79,6 +145,7 @@
             ErrorMessage = ex.Message;
         }
     }
+
     private async Task GoToLikeProfileAsync()
     {
         if (IsLoggedIn.HasValue && IsLoggedIn.Value && HasProfile.HasValue)

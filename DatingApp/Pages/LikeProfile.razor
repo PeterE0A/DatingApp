@@ -3,48 +3,154 @@
 @inject NavigationManager Navigation
 @using DatingApp.Entities
 
+<div class="container">
+    <div class="header">
+        <h1 class="page-title">All Profiles</h1>
+        <div class="filter">
+            <label class="filter-label">
+                <input type="radio" name="genderFilter" value="Male" @onchange="UpdateGenderFilter" />
+                <span class="filter-text">Male</span>
+            </label>
+            <label class="filter-label">
+                <input type="radio" name="genderFilter" value="Female" @onchange="UpdateGenderFilter" />
+                <span class="filter-text">Female</span>
+            </label>
+        </div>
+    </div>
 
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Full Name</th>
+                    <th>Birthday</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Postal Code</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in filteredProfiles)
+                {
+                    <tr>
+                        <td>@profile.UserID</td>
+                        <td>@profile.FullName</td>
+                        <td>@profile.Birthday</td>
+                        <td>@profile.Gender</td>
+                        <td>@profile.City</td>
+                        <td>@profile.PostalCode</td>
+                        <td>
+                            <button class="like-button" @onclick="() => LikeProfileAsync(profile, LoggedInUserId)">
+                                @(profile.IsLiked ? "Liked" : "Like")
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-
-<h1>All Profiles</h1>
-<br />
-
-<div>
-    <label><input type="radio" name="genderFilter" value="Male" @onchange="UpdateGenderFilter" /> Male</label>
-    <label><input type="radio" name="genderFilter" value="Female" @onchange="UpdateGenderFilter" /> Female</label>
+    <button class="check-matches-button" @onclick="CheckMatches">Check Matches</button>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <td>UserID</td>
-            <td>FullName</td>
-            <td>Birthday</td>
-            <td>Gender</td>
-            <td>City</td>
-            <td>PostalCode</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var profile in filteredProfiles)
-        {
-            <tr>
-                <td>@profile.UserID</td>
-                <td>@profile.FullName</td>
-                <td>@profile.Birthday</td>
-                <td>@profile.Gender</td>
-                <td>@profile.City</td>
-                <td>@profile.PostalCode</td>
-                <td>
-                    <button class="btn btn-primary" @onclick="() => LikeProfileAsync(profile, LoggedInUserId)">@(profile.IsLiked ? "Liked" : "Like")</button>
-                </td>
-            </tr>
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
+    }
+
+    /* Additional styles for this page */
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .filter {
+        display: flex;
+        gap: 15px;
+    }
+
+    .filter-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .filter-text {
+        font-weight: 500;
+        margin-left: 5px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th,
+        .table td {
+            padding: 10px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
         }
-    </tbody>
-</table>
 
-<button class="btn btn-primary" @onclick="CheckMatches">Check Matches</button>
+    .like-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
 
+        .like-button:hover {
+            background-color: #0056b3;
+        }
+
+    .check-matches-button {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        display: block;
+        margin: 20px auto 0;
+    }
+
+        .check-matches-button:hover {
+            background-color: #1e7f3e;
+        }
+</style>
 
 @code {
     private List<Profile> profiles;

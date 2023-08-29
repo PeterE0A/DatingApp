@@ -3,29 +3,92 @@
 @inject NavigationManager Navigation
 @using DatingApp.Entities
 
-<h3>Your Matches</h3>
+<div class="container">
+    <h1 class="page-title">Your Matches</h1>
+    <p>You are checking matches for User ID: @LoggedInUserId</p>
 
-<p>You are checking matches for User ID: @LoggedInUserId</p>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Matched UserID</th>
+                    <th>Matched FullName</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var match in matchedProfiles)
+                {
+                    <tr>
+                        <td>@match.UserID</td>
+                        <td>@match.FullName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Matched UserID</th>
-            <th>Matched FullName</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var match in matchedProfiles)
-        {
-            <tr>
-                <td>@match.UserID</td>
-                <td>@match.FullName</td>
-            </tr>
+    <button class="go-back-button" @onclick="GoToLikeProfile">Go to Like Profile</button>
+</div>
+
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
+    }
+
+    /* Additional styles for this page */
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th,
+        .table td {
+            padding: 10px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
         }
-    </tbody>
-</table>
 
-<button @onclick="GoToLikeProfile">Go to Like Profile</button>
+    .go-back-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        display: block;
+        margin-top: 20px;
+    }
+
+        .go-back-button:hover {
+            background-color: #0056b3;
+        }
+</style>
 
 @code {
     [Parameter] public int LoggedInUserId { get; set; }

@@ -1,73 +1,94 @@
 ﻿@inject IDatingAppService DatingAppService
 @using Microsoft.AspNetCore.Components.Web
-
+@inject NavigationManager Navigation
+@using DatingApp.Services
 
 <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">DatingApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+	<div class="container-fluid">
+		<a class="navbar-brand" href="">DatingApp</a>
+		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</div>
 </div>
 
 
 <div class="@NavMenuCssClass">
-    
-      
-      
-       @*@if(IsLoggedIn.HasValue)
-        {*@
-             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="delete-account">
-                    <span class="oi oi-person" aria-hidden="true"></span> Delete Account
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="logout">
-                <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
-                </NavLink>
-            </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="delete-profile">
-                <span class="oi oi-account-logout" aria-hidden="true"></span> Delete Profile
-                </NavLink>
-            </div>
-       @* }
-        else
-        {*@
-        <nav class="flex-column">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-                </NavLink>
-            </div>
-        </nav>
-        @*}*@
-           
-        
 
-   
+
+	@if (IsLoggedIn.HasValue && IsLoggedIn.Value)
+	{
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="javascript:void(0)" @onclick="NavigateToDeleteAccount">
+				<span class="oi oi-person" aria-hidden="true"></span> Delete Account
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="logout">
+				<span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+			</NavLink>
+		</div>
+
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="delete-profile">
+				<span class="oi oi-account-logout" aria-hidden="true"></span> Delete Profile
+			</NavLink>
+		</div>
+	}
+	else
+	{
+		<nav class="flex-column">
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+				<span class="oi oi-home" aria-hidden="true"></span> Home
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="counter">
+				<span class="oi oi-plus" aria-hidden="true"></span> Counter
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="fetchdata">
+				<span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+			</NavLink>
+		</div>
+	</nav>	
+	}
+
+
+
+
+
+	
+
+
+
+
+
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "some-default-value"; // Provide a default value here
-    public bool? IsLoggedIn { get; set; }
+	[Parameter] public bool? IsLoggedIn { get; set; }
+	[Parameter] public int LoggedInUserId { get; set; }
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+	private bool collapseNavMenu = true;
+	private string NavMenuCssClass => collapseNavMenu ? "collapse" : "";
+
+	private void ToggleNavMenu()
+	{
+		collapseNavMenu = !collapseNavMenu;
+	}
+
+	private void NavigateToDeleteAccount()
+	{
+		var deleteAccountUrl = $"delete-account/{LoggedInUserId}";
+		Navigation.NavigateTo(deleteAccountUrl);
+	}
 }
+
+
+
+
+

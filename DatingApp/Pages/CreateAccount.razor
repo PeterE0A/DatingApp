@@ -3,34 +3,70 @@
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
 
-<h3>Create Account</h3>
+<div class="container">
+    <div class="card p-4 shadow">
+        <h3 class="text-primary mb-4">Create Account</h3>
 
-<div>
-    <label for="username">Username:</label>
-    <input type="text" id="username" @bind="@Username" />
-</div>
-<div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" @bind="@Password" />
-</div>
-<button @onclick="CreateAccountAsync">Create Account</button>
+        <div class="form-group mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" @bind="@Username" class="form-control" placeholder="Enter your username" />
+        </div>
 
-<div>
-    @if (IsAccountCreated.HasValue)
-    {
-        if (IsAccountCreated.Value)
-        {
-            <p>Account created successfully!</p>
-            
-        }
-        else
-        {
-            <p>@ErrorMessage</p>
-        }
+        <div class="form-group mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" @bind="@Password" class="form-control" placeholder="Enter your password" />
+        </div>
+
+        <button @onclick="CreateAccountAsync" class="btn btn-primary btn-block mb-3">Create Account</button>
+
+        <div class="text-center">
+            @if (IsAccountCreated.HasValue)
+            {
+                if (IsAccountCreated.Value)
+                {
+                    <p class="success-message">Account created successfully!</p>
+                }
+                else
+                {
+                    <p class="error-message">@ErrorMessage</p>
+                }
+            }
+        </div>
+
+        <p class="mt-3 text-center">Already have an account? <a href="/login" class="text-primary">Log in here</a>.</p>
+    </div>
+</div>
+
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
     }
-</div>
 
-<p>Already have an account? <a href="/login">Log in here</a>.</p>
+    /* Container Styles */
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    /* Existing styles */
+    .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .shadow {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 @code {
     private string? Username { get; set; }

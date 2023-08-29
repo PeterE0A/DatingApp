@@ -2,54 +2,116 @@
 @inject IDatingAppService DatingAppService
 @inject NavigationManager Navigation
 
-<h3>Create Profile</h3>
+<div class="container">
+    <div class="card p-4 shadow">
+        <h3 class="text-primary mb-4">Create Profile</h3>
 
-<div>
-    <label for="fullName">Full Name:</label>
-    <input type="text" id="fullName" @bind="@FullName" />
-</div>
-<div>
-    <label for="birthday">Birthday:</label>
-    <input type="date" id="birthday" @bind="@Birthday" />
-</div>
-<div>
-    <label for="gender">Gender:</label>
-    <select id="gender" @bind="@Gender">
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-    </select>
-</div>
-<div>
-    <label for="city">City:</label>
-    <input type="text" id="city" @bind="@City" />
-</div>
-<div>
-    <label for="postalCode">Postal Code:</label>
-    <input type="text" id="postalCode" @bind="@PostalCode" />
-</div>
-<button @onclick="CreateProfileAsync">Create Profile</button>
-<button @onclick="GoBack">Go Back</button>
+        <div class="form-group mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" id="fullName" @bind="@FullName" class="form-control" placeholder="Enter your full name" />
+        </div>
 
-<div>
-    @if (ProfileCreated.HasValue)
-    {
-        if (ProfileCreated.Value)
-        {
-            <p>Profile created successfully!</p>
-            <button @onclick="GoBack">Try Logging In</button>
-           
-        }
-        else
-        {
-            <p>@ErrorMessage</p>
-        }
+        <div class="form-group mb-3">
+            <label for="birthday" class="form-label">Birthday</label>
+            <input type="date" id="birthday" @bind="@Birthday" class="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" @bind="@Gender" class="form-control">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" id="city" @bind="@City" class="form-control" placeholder="Enter your city" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input type="text" id="postalCode" @bind="@PostalCode" class="form-control" placeholder="Enter your postal code" />
+        </div>
+
+        <button @onclick="CreateProfileAsync" class="btn btn-primary btn-block mb-3">Create Profile</button>
+        <button @onclick="GoBack" class="btn btn-secondary btn-block">Go Back</button>
+
+        <div class="text-center">
+            @if (ProfileCreated.HasValue)
+            {
+                if (ProfileCreated.Value)
+                {
+                    <p class="success-message">Profile created successfully!</p>
+                    <button @onclick="GoBack" class="btn btn-success btn-block">Try Logging In</button>
+                }
+                else
+                {
+                    <p class="error-message">@ErrorMessage</p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
     }
-</div>
+
+    /* Container Styles */
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    /* Existing styles */
+    .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .shadow {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Additional styles for this page */
+    .text-primary {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .success-message {
+        color: #28a745;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+</style>
 
 @code {
     private string? FullName { get; set; }
     private DateTime Birthday { get; set; }
-    private string? Gender { get; set; } = "Male"; 
+    private string? Gender { get; set; } = "Male";
     private string? City { get; set; }
     private string? PostalCode { get; set; }
     private bool? ProfileCreated { get; set; }

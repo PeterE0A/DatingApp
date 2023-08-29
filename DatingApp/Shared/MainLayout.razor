@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
 
 
 <PageTitle>DatingApp</PageTitle>
@@ -22,6 +23,7 @@
 
         <article class="content px-4">
             <!-- Your default content goes here -->
+        
             @Body
         </article>
 
