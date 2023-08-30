@@ -21,6 +21,9 @@
                     <tr>
                         <td>@match.UserID</td>
                         <td>@match.FullName</td>
+                        <td>
+                            <button @onclick="() => StartChat(match.UserID)">Chat</button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -95,9 +98,11 @@
 
     private List<Profile> matchedProfiles = new List<Profile>();
 
+    private string loggedInUsername;
+
     protected override async Task OnInitializedAsync()
     {
-        matchedProfiles = await LoadMatchedProfiles(LoggedInUserId);
+           matchedProfiles = await LoadMatchedProfiles(LoggedInUserId);
     }
 
     private async Task<List<Profile>> LoadMatchedProfiles(int userId)
@@ -125,4 +130,20 @@
     {
         Navigation.NavigateTo($"/like-profile/{LoggedInUserId}");
     }
+
+    private async Task StartChat(int otherUserId)
+    {
+        int? loggedInUserId = await DatingAppService.GetUserIdByUsername(loggedInUsername);
+
+        if (loggedInUserId.HasValue)
+        {
+            // Insert a new chat message
+            int? messageId = await DatingAppService.InsertChatMessage(loggedInUserId.Value, otherUserId, "Hello!");
+
+            // Navigate to the chat page with the appropriate parameters
+            Navigation.NavigateTo($"chat/{otherUserId}");
+        }
+    }
+
+
 }

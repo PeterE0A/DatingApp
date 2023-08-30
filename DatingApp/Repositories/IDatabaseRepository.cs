@@ -7,8 +7,10 @@ namespace DatingApp.Repositories
     public interface IDatabaseRepository
     {
         //---------------------------------------------------------------
-        Task<int?> GetUserIdByUsername(string username);
+        Task<List<ChatMessage>> GetChatMessagesForUsers(int loggedInUserId, int otherUserId);
+        Task<int?> InsertChatMessageAsync(int senderId, int receiverId, string messageContent);
         //-----------------------------------------------------------
+        Task<int?> GetUserIdByUsername(string username);
         Task<List<Profile>> GetProfilesByGender(string gender);
         List<Profile> GetProfiles();
         Profile GetProfile(int id);

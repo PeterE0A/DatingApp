@@ -7,11 +7,14 @@ namespace DatingApp.Services
     public interface IDatingAppService
     {
         //-----------------------------------------
-        Task<int?> GetUserIdByUsername(string username);
-        //---------------------------------------
+        Task<List<ChatMessage>> GetChatMessagesForUsers(int loggedInUserId, int otherUserId);
+        Task<int?> InsertChatMessage(int senderId, int receiverId, string messageContent);
+    
+    //---------------------------------------
+
+       Task<int?> GetUserIdByUsername(string username);
+
         Task<List<Profile>> GetProfilesByGender(string gender);
-
-
         List<Profile> GetProfiles();
         Profile GetProfile(int id);
         Task<bool> DeleteProfileAsync(int userId);

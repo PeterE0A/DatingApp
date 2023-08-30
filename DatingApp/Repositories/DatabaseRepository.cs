@@ -457,7 +457,75 @@ namespace DatingApp.Repositories
 
 
 
+        ///-------------------------------------------------------------------------------
+        ///
+        public async Task<List<ChatMessage>> GetChatMessagesForUsers(int loggedInUserId, int otherUserId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
 
+                string query = "SELECT * FROM ChatMessages WHERE (SenderId = @LoggedInUserId AND ReceiverId = @OtherUserId) OR (SenderId = @OtherUserId AND ReceiverId = @LoggedInUserId) ORDER BY Timestamp";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@LoggedInUserId", loggedInUserId);
+                    command.Parameters.AddWithValue("@OtherUserId", otherUserId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        List<ChatMessage> messages = new List<ChatMessage>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            ChatMessage message = new ChatMessage
+                            {
+                                MessageId = reader.GetInt32(reader.GetOrdinal("MessageId")),
+                                SenderId = reader.GetInt32(reader.GetOrdinal("SenderId")),
+                                ReceiverId = reader.GetInt32(reader.GetOrdinal("ReceiverId")),
+                                MessageContent = reader.GetString(reader.GetOrdinal("MessageContent")),
+                                Timestamp = reader.GetDateTime(reader.GetOrdinal("Timestamp"))
+                            };
+
+                            messages.Add(message);
+                        }
+
+                        return messages;
+                    }
+                }
+            }
+        }
+
+
+        public async Task<int?> InsertChatMessageAsync(int senderId, int receiverId, string messageContent)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string insertQuery = "INSERT INTO ChatMessages (SenderId, ReceiverId, MessageContent, Timestamp) VALUES (@SenderId, @ReceiverId, @MessageContent, GETDATE());";
+                string identityQuery = "SELECT SCOPE_IDENTITY();";
+
+                var insertParam = new { SenderId = senderId, ReceiverId = receiverId, MessageContent = messageContent };
+
+                using (var insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@SenderId", senderId);
+                    insertCommand.Parameters.AddWithValue("@ReceiverId", receiverId);
+                    insertCommand.Parameters.AddWithValue("@MessageContent", messageContent);
+
+                    await insertCommand.ExecuteNonQueryAsync();
+                }
+
+                using (var identityCommand = new SqlCommand(identityQuery, connection))
+                {
+                    int? messageId = (int?)await identityCommand.ExecuteScalarAsync();
+                    return messageId;
+                }
+            }
+        }
+
+        ///----------------------------------------------------------------------------
 
 
 

@@ -7,11 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\ChatComponent.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Utilities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\ChatComponent.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\ChatComponent.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\ChatComponent.razor" />
   </ItemGroup>
 
 </Project>

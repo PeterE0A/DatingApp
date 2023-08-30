@@ -222,11 +222,21 @@ namespace DatingApp.Services
         //    return await _databaseRepository.GetProfileByIdAsync(userId);
         //}
 
-        //--------------------------------------------------------------------------
-
         public async Task<int?> GetUserIdByUsername(string username)
         {
             return await _databaseRepository.GetUserIdByUsername(username);
+        }
+
+
+        //--------------------------------------------------------------------------
+        public async Task<List<ChatMessage>> GetChatMessagesForUsers(int loggedInUserId, int otherUserId)
+        {
+            return await _databaseRepository.GetChatMessagesForUsers(loggedInUserId, otherUserId);
+        }
+
+        public async Task<int?> InsertChatMessage(int senderId, int receiverId, string messageContent)
+        {
+            return await _databaseRepository.InsertChatMessageAsync(senderId, receiverId, messageContent);
         }
 
         //-----------------------------------------------------------------------
