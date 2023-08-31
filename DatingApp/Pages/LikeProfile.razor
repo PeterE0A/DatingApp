@@ -56,7 +56,7 @@
 </div>
 
 <style>
-    /* Global Styles */
+    
     body {
         font-family: 'Inter', Arial, sans-serif;
         margin: 0;
@@ -64,7 +64,7 @@
         background-color: #f7f9fc;
     }
 
-    /* Additional styles for this page */
+    
     .container {
         max-width: 1000px;
         margin: 0 auto;
@@ -164,7 +164,7 @@
     protected override async Task OnInitializedAsync()
     {
 
-        profiles = DatingAppService.GetProfiles(); // Make sure to await the method call
+        profiles = DatingAppService.GetProfiles();
         await UpdateFilteredProfiles();
     }
 
@@ -188,12 +188,12 @@
 
     private async Task LikeProfileAsync(Profile profile, int likerUserId)
     {
-        // Assuming you have an AddLikeAsync method in IDatingAppService
+       
         bool success = await DatingAppService.AddLikeAsync(likerUserId, profile.UserID);
 
         if (success)
         {
-            profile.IsLiked = true; // Assuming you have an IsLiked property in the Profile class
+            profile.IsLiked = true; 
         }
     }
 

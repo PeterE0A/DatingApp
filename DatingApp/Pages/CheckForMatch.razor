@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation
 @using DatingApp.Entities
 
+
 <div class="container">
     <h1 class="page-title">Your Matches</h1>
     <p>You are checking matches for User ID: @LoggedInUserId</p>
@@ -22,7 +23,7 @@
                         <td>@match.UserID</td>
                         <td>@match.FullName</td>
                         <td>
-                            <button @onclick="() => StartChat(match.UserID)">Chat</button>
+                              <a href="@($"/chat/{LoggedInUserId}/{match.UserID}")">Chat</a>
                         </td>
                     </tr>
                 }
@@ -34,7 +35,7 @@
 </div>
 
 <style>
-    /* Global Styles */
+   
     body {
         font-family: 'Inter', Arial, sans-serif;
         margin: 0;
@@ -42,7 +43,7 @@
         background-color: #f7f9fc;
     }
 
-    /* Additional styles for this page */
+   
     .container {
         max-width: 1000px;
         margin: 0 auto;
@@ -98,11 +99,12 @@
 
     private List<Profile> matchedProfiles = new List<Profile>();
 
-    private string loggedInUsername;
+
 
     protected override async Task OnInitializedAsync()
     {
-           matchedProfiles = await LoadMatchedProfiles(LoggedInUserId);
+
+        matchedProfiles = await LoadMatchedProfiles(LoggedInUserId);
     }
 
     private async Task<List<Profile>> LoadMatchedProfiles(int userId)
@@ -131,18 +133,10 @@
         Navigation.NavigateTo($"/like-profile/{LoggedInUserId}");
     }
 
-    private async Task StartChat(int otherUserId)
+    private void StartChat(int matchedUserId)
     {
-        int? loggedInUserId = await DatingAppService.GetUserIdByUsername(loggedInUsername);
 
-        if (loggedInUserId.HasValue)
-        {
-            // Insert a new chat message
-            int? messageId = await DatingAppService.InsertChatMessage(loggedInUserId.Value, otherUserId, "Hello!");
-
-            // Navigate to the chat page with the appropriate parameters
-            Navigation.NavigateTo($"chat/{otherUserId}");
-        }
+        Navigation.NavigateTo($"/chat/{LoggedInUserId}/{matchedUserId}");
     }
 
 

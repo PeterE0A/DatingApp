@@ -1,8 +1,8 @@
-using DatingApp.Data; // Adjust the namespace as needed
+using DatingApp.Data; 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using DatingApp.Services; // Replace with your actual namespace
+using DatingApp.Services; 
 using DatingApp.Repositories;
 using System.IO;
 
@@ -17,9 +17,6 @@ string connectionString = configuration.GetConnectionString("DatingAppDB");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-// Replace with your actual connection string
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

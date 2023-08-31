@@ -48,7 +48,7 @@
 </div>
 
 <style>
-    /* Global Styles */
+   
     body {
         font-family: 'Inter', Arial, sans-serif;
         margin: 0;
@@ -56,14 +56,12 @@
         background-color: #f7f9fc;
     }
 
-    /* Container Styles */
     .container {
         max-width: 500px;
         margin: 0 auto;
         padding: 40px;
     }
 
-    /* Existing styles */
     .form-label {
         font-weight: bold;
         color: #333;
@@ -77,7 +75,6 @@
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Additional styles for this page */
     .text-primary {
         color: #007bff;
         font-weight: bold;
@@ -109,10 +106,6 @@
     public string? ErrorMessage { get; set; }
     public bool? HasProfile { get; set; }
 
- //_----------
-    //private int LoggedInUserId { get; set; }
-
-    //-------
     private async Task LogInAsync()
     {
         try
@@ -157,7 +150,6 @@
             }
             else
             {
-                // Navigation.NavigateTo("/create-profile");
                 CreateProfile();
             }
         }

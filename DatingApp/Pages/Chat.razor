@@ -1,0 +1,130 @@
+﻿@page "/chat/{loggedInUserId:int}/{otherUserId:int}"
+@inject IDatingAppService DatingAppService
+@inject NavigationManager Navigation
+@using DatingApp.Entities
+
+<div class="container">
+    <h1 class="page-title">Chat with Matched User</h1>
+
+    <div class="chat-messages">
+        @foreach (var message in chatMessages)
+        {
+            <div class="chat-message">
+                <p>@message.MessageContent</p>
+                <small>@message.Timestamp</small>
+            </div>
+        }
+    </div>
+
+    <div class="chat-input">
+        <input type="text" @bind="newMessage" />
+        <button @onclick="SendMessage">Send</button>
+    </div>
+</div>
+
+<style>
+   
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
+    }
+
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .chat-messages {
+        overflow-y: auto;
+        max-height: 400px; 
+    }
+
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-message p {
+        margin: 0;
+    }
+
+    .chat-message small {
+        color: #999;
+    }
+
+    .chat-input {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .chat-input button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .chat-input button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+@code {
+    private List<ChatMessage> chatMessages = new List<ChatMessage>();
+    private string newMessage = "";
+    private int loggedInUserId;
+    private int otherUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUserId = int.Parse(RouteData.Values["loggedInUserId"].ToString());
+        otherUserId = int.Parse(RouteData.Values["otherUserId"].ToString());
+
+        chatMessages = await DatingAppService.GetChatMessagesForUsers(loggedInUserId, otherUserId);
+    }
+
+    private async Task SendMessage()
+    {
+        if (!string.IsNullOrWhiteSpace(newMessage))
+        {
+            int? messageId = await DatingAppService.InsertChatMessage(loggedInUserId, otherUserId, newMessage);
+
+            chatMessages.Add(new ChatMessage
+            {
+                MessageId = messageId ?? 0,
+                SenderId = loggedInUserId,
+                ReceiverId = otherUserId,
+                MessageContent = newMessage,
+                Timestamp = DateTime.Now
+            });
+
+            newMessage = "";
+        }
+    }
+}

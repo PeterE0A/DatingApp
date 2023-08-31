@@ -29,7 +29,7 @@
 </div>
 
 <style>
-    /* Global Styles */
+    
     body {
         font-family: 'Inter', Arial, sans-serif;
         margin: 0;
@@ -37,16 +37,16 @@
         background-color: #f7f9fc;
     }
 
-    /* Container Styles */
+    
     .container {
         display: flex;
         justify-content: center;
         align-items: flex-start;
         min-height: 100vh;
-        padding-top: 50px; /* Add spacing from the top */
+        padding-top: 50px; 
     }
 
-    /* Card Styles */
+    
     .card {
         background-color: #fff;
         border-radius: 10px;
@@ -57,7 +57,7 @@
         text-align: center;
     }
 
-    /* Content Styles */
+  
     .content {
         margin-bottom: 20px;
     }
@@ -73,12 +73,12 @@
         color: #666;
     }
 
-    /* Form Styles */
+    
     .form {
         margin-bottom: 20px;
     }
 
-    /* Button Styles */
+    
     .buttons {
         display: flex;
         justify-content: space-between;
@@ -109,7 +109,7 @@
         margin-left: 10px;
     }
 
-    /* Result Message Styles */
+    
     .result-message {
         margin-top: 20px;
     }
@@ -128,10 +128,6 @@
     private bool? IsAccountDeleted { get; set; }
     private string? ErrorMessage { get; set; }
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    await DeleteAccountAsync(); // Automatically initiate the account deletion when the page loads
-    //}
 
     private async Task DeleteAccountAsync()
     {

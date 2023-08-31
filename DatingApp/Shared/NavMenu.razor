@@ -17,8 +17,7 @@
 
 
 
-	@if (IsLoggedIn.HasValue && IsLoggedIn.Value)
-	{
+	
 		<div class="nav-item px-3">
 			<NavLink class="nav-link" href="javascript:void(0)" @onclick="NavigateToDeleteAccount">
 				<span class="oi oi-person" aria-hidden="true"></span> Delete Account
@@ -35,9 +34,8 @@
 				<span class="oi oi-account-logout" aria-hidden="true"></span> Delete Profile
 			</NavLink>
 		</div>
-	}
-	else
-	{
+	
+	
 		<nav class="flex-column">
 		<div class="nav-item px-3">
 			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -55,7 +53,7 @@
 			</NavLink>
 		</div>
 	</nav>	
-	}
+	
 
 
 
@@ -70,7 +68,7 @@
 </div>
 
 @code {
-	[Parameter] public bool? IsLoggedIn { get; set; }
+	
 	[Parameter] public int LoggedInUserId { get; set; }
 
 	private bool collapseNavMenu = true;

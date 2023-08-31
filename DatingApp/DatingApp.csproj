@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\ChatComponent.razor" />
+    <Content Remove="Pages\Chat.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,15 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\ChatComponent.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\ChatComponent.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\ChatComponent.razor" />
+    <None Include="Pages\Chat.razor" />
   </ItemGroup>
 
 </Project>
